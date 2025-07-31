@@ -360,6 +360,32 @@
                 margin: 2rem auto;
             }
         }
+
+        .nav-back {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #00E5FF, #0091EA);
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .nav-back:hover {
+            background: linear-gradient(45deg, #40C4FF, #00E5FF);
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 229, 255, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -474,5 +500,8 @@
             animateDepth();
         });
     </script>
+
+    <!-- Navigation -->
+    <a href="index.html" class="nav-back">← BACK TO INDEX</a>
 </body>
 </html>
