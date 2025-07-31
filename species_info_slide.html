@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Deep Sea Discovery - Species Information</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400&display=swap');
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background: linear-gradient(135deg, #0A0E27 0%, #1A237E 50%, #0D1421 100%);
+                min-height: 100vh;
+                overflow-y: auto;
+                font-family: 'Orbitron', sans-serif;
+                position: relative;
+            }
+
+            /* Animated background particles */
+            .particles {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                pointer-events: none;
+            }
+
+            .particle {
+                position: absolute;
+                background: #00E5FF;
+                border-radius: 50%;
+                opacity: 0.1;
+                animation: float 6s ease-in-out infinite;
+            }
+
+            .particle:nth-child(1) {
+                width: 4px;
+                height: 4px;
+                left: 10%;
+                animation-delay: 0s;
+            }
+
+            .particle:nth-child(2) {
+                width: 6px;
+                height: 6px;
+                left: 20%;
+                animation-delay: 1s;
+            }
+
+            .particle:nth-child(3) {
+                width: 3px;
+                height: 3px;
+                left: 30%;
+                animation-delay: 2s;
+            }
+
+            .particle:nth-child(4) {
+                width: 5px;
+                height: 5px;
+                left: 40%;
+                animation-delay: 0.5s;
+            }
+
+            .particle:nth-child(5) {
+                width: 4px;
+                height: 4px;
+                left: 50%;
+                animation-delay: 1.5s;
+            }
+
+            .particle:nth-child(6) {
+                width: 7px;
+                height: 7px;
+                left: 60%;
+                animation-delay: 3s;
+            }
+
+            .particle:nth-child(7) {
+                width: 3px;
+                height: 3px;
+                left: 70%;
+                animation-delay: 2.5s;
+            }
+
+            .particle:nth-child(8) {
+                width: 5px;
+                height: 5px;
+                left: 80%;
+                animation-delay: 4s;
+            }
+
+            .particle:nth-child(9) {
+                width: 4px;
+                height: 4px;
+                left: 90%;
+                animation-delay: 1s;
+            }
+
+            @keyframes float {
+                0%, 100% {
+                    transform: translateY(100vh) rotate(0deg);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 0.1;
+                }
+                50% {
+                    opacity: 0.3;
+                }
+                90% {
+                    opacity: 0.1;
+                }
+            }
+
+            /* Main content container */
+            .container {
+                position: relative;
+                z-index: 10;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                text-align: center;
+                padding: 2rem;
+                padding-top: 3rem;
+            }
+
+            .title {
+                font-size: 3.5rem;
+                font-weight: 900;
+                color: #E3F2FD;
+                margin-bottom: 0.5rem;
+                text-shadow: 0 0 30px #00E5FF;
+                letter-spacing: 8px;
+                animation: glow 3s ease-in-out infinite alternate;
+            }
+
+            @keyframes glow {
+                from {
+                    text-shadow: 0 0 30px #00E5FF, 0 0 40px #00E5FF;
+                }
+                to {
+                    text-shadow: 0 0 20px #00E5FF, 0 0 30px #00E5FF, 0 0 40px #00E5FF;
+                }
+            }
+
+            .subtitle {
+                font-size: 1.4rem;
+                color: #81C784;
+                margin-bottom: 2rem;
+                font-family: 'JetBrains Mono', monospace;
+                letter-spacing: 3px;
+            }
+
+            .species-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+                width: 90%;
+                max-width: 1200px;
+                margin-bottom: 2rem;
+            }
+
+            .species-info {
+                background: rgba(26, 35, 126, 0.3);
+                border: 1px solid #00E5FF;
+                padding: 2rem;
+                backdrop-filter: blur(10px);
+                border-radius: 8px;
+                text-align: left;
+            }
+
+            .info-title {
+                font-size: 1.8rem;
+                color: #00E5FF;
+                margin-bottom: 1.5rem;
+                text-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+            }
+
+            .info-item {
+                margin-bottom: 1.2rem;
+                font-family: 'JetBrains Mono', monospace;
+            }
+
+            .info-label {
+                color: #81C784;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 0.3rem;
+            }
+
+            .info-value {
+                color: #E3F2FD;
+                font-size: 1.1rem;
+                line-height: 1.4;
+            }
+
+            .images-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .image-placeholder {
+                background: rgba(26, 35, 126, 0.3);
+                border: 2px dashed rgba(0, 229, 255, 0.5);
+                border-radius: 8px;
+                height: 350px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .image-placeholder:hover {
+                border-color: #00E5FF;
+                background: rgba(26, 35, 126, 0.5);
+                transform: scale(1.02);
+                box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+            }
+
+            .placeholder-text {
+                color: rgba(0, 229, 255, 0.7);
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .nav-back {
+                position: fixed;
+                bottom: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(45deg, #00E5FF, #0091EA);
+                color: #000;
+                padding: 12px 30px;
+                border-radius: 25px;
+                text-decoration: none;
+                font-family: 'JetBrains Mono', monospace;
+                font-weight: 700;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+                letter-spacing: 1px;
+                border: none;
+                cursor: pointer;
+                z-index: 100;
+            }
+
+            .nav-back:hover {
+                background: linear-gradient(45deg, #40C4FF, #00E5FF);
+                transform: translateX(-50%) scale(1.05);
+                box-shadow: 0 10px 20px rgba(0, 229, 255, 0.3);
+            }
+
+            /* Responsive design */
+            @media (max-width: 768px) {
+                .title {
+                    font-size: 2.5rem;
+                    letter-spacing: 4px;
+                }
+
+                .subtitle {
+                    font-size: 1rem;
+                }
+
+                .species-content {
+                    grid-template-columns: 1fr;
+                    gap: 2rem;
+                    width: 100%;
+                }
+
+                .images-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .image-placeholder {
+                    height: 250px;
+                }
+
+                .container {
+                    padding: 1rem;
+                    padding-top: 2rem;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Background particles -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <!-- Main content -->
+        <div class="container">
+            <h1 class="title">SPECIES PROFILE</h1>
+            <h2 class="subtitle">MESONYCHOTEUTHIS HAMILTONI</h2>
+
+            <div class="species-content">
+                <div class="species-info">
+                    <h3 class="info-title">Colossal Squid Data</h3>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Scientific Classification</div>
+                        <div class="info-value">Family: Cranchiidae (glass squids)</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">Physical Characteristics</div>
+                        <div class="info-value">Length: Up to 4.2 meters (14 feet)<br>
+                        Weight: 600-700 kg (1,300-1,500 lbs)<br>
+                        Tentacle hooks: Rotating, razor-sharp<br>
+                        Eyes: Largest in animal kingdom (12cm diameter)</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">Habitat</div>
+                        <div class="info-value">Depth range by age:<br>
+                        • Young: 0-500 meters<br>
+                        • Adolescent: 500-2,000 meters<br>
+                        • Adult: Mesopelagic/bathypelagic zones<br>
+                        Temperature: 0-4°C<br>
+                        Region: Antarctic waters</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">Behavior</div>
+                        <div class="info-value">Ambush predator<br>
+                        Rarely observed alive<br>
+                        Deep sea dweller<br>
+                        Elusive nature</div>
+                    </div>
+                </div>
+
+                <div class="images-grid">
+                    <div class="image-placeholder">
+                        <img src="squid1.jpg" alt="Colossal Squid Image 1" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="image-placeholder">
+                        <img src="squid2.jpg" alt="Colossal Squid Image 2" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="image-placeholder">
+                        <img src="squid3.jpg" alt="Colossal Squid Image 3" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="image-placeholder">
+                        <img src="squid4.jpg" alt="Colossal Squid Image 4" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <a href="index.html" class="nav-back">← BACK TO INDEX</a>
+    </body>
+
+</html>

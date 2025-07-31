@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Deep Sea Classified - Intro Slide</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400&display=swap');
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background: linear-gradient(135deg, #0A0E27 0%, #1A237E 50%, #0D1421 100%);
+                height: 100vh;
+                overflow: hidden;
+                font-family: 'Orbitron', sans-serif;
+                position: relative;
+            }
+
+            /* Animated background particles */
+            .particles {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .particle {
+                position: absolute;
+                background: #00E5FF;
+                border-radius: 50%;
+                opacity: 0.1;
+                animation: float 6s ease-in-out infinite;
+            }
+
+            .particle:nth-child(1) {
+                width: 4px;
+                height: 4px;
+                left: 10%;
+                animation-delay: 0s;
+            }
+
+            .particle:nth-child(2) {
+                width: 6px;
+                height: 6px;
+                left: 20%;
+                animation-delay: 1s;
+            }
+
+            .particle:nth-child(3) {
+                width: 3px;
+                height: 3px;
+                left: 30%;
+                animation-delay: 2s;
+            }
+
+            .particle:nth-child(4) {
+                width: 5px;
+                height: 5px;
+                left: 40%;
+                animation-delay: 0.5s;
+            }
+
+            .particle:nth-child(5) {
+                width: 4px;
+                height: 4px;
+                left: 50%;
+                animation-delay: 1.5s;
+            }
+
+            .particle:nth-child(6) {
+                width: 7px;
+                height: 7px;
+                left: 60%;
+                animation-delay: 3s;
+            }
+
+            .particle:nth-child(7) {
+                width: 3px;
+                height: 3px;
+                left: 70%;
+                animation-delay: 2.5s;
+            }
+
+            .particle:nth-child(8) {
+                width: 5px;
+                height: 5px;
+                left: 80%;
+                animation-delay: 4s;
+            }
+
+            .particle:nth-child(9) {
+                width: 4px;
+                height: 4px;
+                left: 90%;
+                animation-delay: 1s;
+            }
+
+            @keyframes float {
+
+                0%,
+                100% {
+                    transform: translateY(100vh) rotate(0deg);
+                    opacity: 0;
+                }
+
+                10% {
+                    opacity: 0.1;
+                }
+
+                50% {
+                    opacity: 0.3;
+                }
+
+                90% {
+                    opacity: 0.1;
+                }
+            }
+
+            /* Sonar ping animation */
+            .sonar {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 300px;
+                height: 300px;
+                border: 2px solid #00E5FF;
+                border-radius: 50%;
+                opacity: 0;
+                animation: sonarPing 4s ease-out infinite;
+            }
+
+            .sonar:nth-child(2) {
+                animation-delay: 1s;
+            }
+
+            .sonar:nth-child(3) {
+                animation-delay: 2s;
+            }
+
+            @keyframes sonarPing {
+                0% {
+                    transform: translate(-50%, -50%) scale(0);
+                    opacity: 1;
+                }
+
+                100% {
+                    transform: translate(-50%, -50%) scale(3);
+                    opacity: 0;
+                }
+            }
+
+            /* Main content container */
+            .container {
+                position: relative;
+                z-index: 10;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 2rem;
+            }
+
+            /* Classification header */
+            .classification {
+                position: absolute;
+                top: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(255, 0, 0, 0.2);
+                color: #FF4444;
+                padding: 0.5rem 2rem;
+                border: 2px solid #FF4444;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.9rem;
+                letter-spacing: 2px;
+                animation: flicker 2s ease-in-out infinite alternate;
+            }
+
+            @keyframes flicker {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.7;
+                }
+            }
+
+            /* Main title */
+            .title {
+                font-size: 4.5rem;
+                font-weight: 900;
+                color: #E3F2FD;
+                margin-bottom: 1rem;
+                text-shadow: 0 0 30px #00E5FF;
+                letter-spacing: 8px;
+                animation: glow 3s ease-in-out infinite alternate;
+            }
+
+            @keyframes glow {
+                from {
+                    text-shadow: 0 0 30px #00E5FF, 0 0 40px #00E5FF;
+                }
+
+                to {
+                    text-shadow: 0 0 20px #00E5FF, 0 0 30px #00E5FF, 0 0 40px #00E5FF;
+                }
+            }
+
+            /* Subtitle */
+            .subtitle {
+                font-size: 1.8rem;
+                color: #81C784;
+                margin-bottom: 3rem;
+                font-family: 'JetBrains Mono', monospace;
+                letter-spacing: 3px;
+                opacity: 0;
+                animation: fadeInUp 2s ease-out 1s forwards;
+            }
+
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Mission details */
+            .mission-info {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+                margin-bottom: 3rem;
+                opacity: 0;
+                animation: fadeInUp 2s ease-out 2s forwards;
+            }
+
+            .info-box {
+                background: rgba(26, 35, 126, 0.3);
+                border: 1px solid #00E5FF;
+                padding: 1.5rem;
+                backdrop-filter: blur(10px);
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .info-box:hover {
+                background: rgba(26, 35, 126, 0.5);
+                box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+                transform: translateY(-5px);
+            }
+
+            .info-label {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.8rem;
+                color: #00E5FF;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 0.5rem;
+            }
+
+            .info-value {
+                font-size: 1.2rem;
+                color: #E3F2FD;
+                font-weight: 700;
+            }
+
+            /* Bottom info */
+            .presenter {
+                position: absolute;
+                bottom: 2rem;
+                right: 2rem;
+                font-family: 'JetBrains Mono', monospace;
+                color: #81C784;
+                font-size: 0.9rem;
+                opacity: 0.7;
+            }
+
+            .depth-indicator {
+                position: absolute;
+                left: 2rem;
+                top: 50%;
+                transform: translateY(-50%);
+                writing-mode: vertical-rl;
+                font-family: 'JetBrains Mono', monospace;
+                color: #00E5FF;
+                font-size: 0.9rem;
+                letter-spacing: 2px;
+            }
+
+            /* Pulsing indicator */
+            .status-indicator {
+                position: absolute;
+                top: 2rem;
+                right: 2rem;
+                width: 12px;
+                height: 12px;
+                background: #00FF00;
+                border-radius: 50%;
+                animation: pulse 1.5s ease-in-out infinite;
+            }
+
+            @keyframes pulse {
+
+                0%,
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+
+                50% {
+                    opacity: 0.5;
+                    transform: scale(1.2);
+                }
+            }
+
+            .status-text {
+                position: absolute;
+                top: 2rem;
+                right: 4rem;
+                font-family: 'JetBrains Mono', monospace;
+                color: #00FF00;
+                font-size: 0.8rem;
+            }
+
+            /* Navigation button */
+            .nav-back {
+                position: absolute;
+                bottom: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(45deg, #00E5FF, #0091EA);
+                color: #000;
+                padding: 12px 30px;
+                border-radius: 25px;
+                text-decoration: none;
+                font-family: 'JetBrains Mono', monospace;
+                font-weight: 700;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+                letter-spacing: 1px;
+                border: none;
+                cursor: pointer;
+            }
+
+            .nav-back:hover {
+                background: linear-gradient(45deg, #40C4FF, #00E5FF);
+                transform: translateX(-50%) scale(1.05);
+                box-shadow: 0 10px 20px rgba(0, 229, 255, 0.3);
+            }
+
+            /* Responsive design */
+            @media (max-width: 768px) {
+                .title {
+                    font-size: 3rem;
+                }
+
+                .subtitle {
+                    font-size: 1.2rem;
+                }
+
+                .mission-info {
+                    grid-template-columns: 1fr;
+                    gap: 1rem;
+                }
+
+                .classification {
+                    font-size: 0.7rem;
+                    padding: 0.3rem 1rem;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Background particles -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <!-- Sonar rings -->
+        <div class="sonar"></div>
+        <div class="sonar"></div>
+        <div class="sonar"></div>
+
+        <!-- Status indicators -->
+        <div class="classification">DEEP SEA CLASSIFIED</div>
+        <div class="status-text">LIVE</div>
+        <div class="status-indicator"></div>
+
+        <!-- Main content -->
+        <div class="container">
+            <h1 class="title">DEEP</h1>
+            <h2 class="subtitle">FIRST CONTACT: MARCH 9, 2025</h2>
+
+            <div class="mission-info">
+                <div class="info-box">
+                    <div class="info-label">Location</div>
+                    <div class="info-value">South Sandwich Islands</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Depth</div>
+                    <div class="info-value">surface entry point</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Status</div>
+                    <div class="info-value">BREAKTHROUGH</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Side indicators -->
+        <div class="depth-indicator">DESCENT INTO THE ABYSS</div>
+        <div class="presenter">The Life Aquatic<br>Daniel Traynor</div>
+
+        <!-- Navigation -->
+        <a href="index.html" class="nav-back">← BACK TO MISSION BRIEFING</a>
+    </body>
+
+</html>

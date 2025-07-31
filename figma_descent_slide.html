@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ROV SuBastian Descent - Ultimate Mission</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;600&family=Inter:wght@300;400;600&display=swap');
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background: linear-gradient(180deg,
+                        #87CEEB 0%,
+                        /* Surface - light blue */
+                        #4682B4 12%,
+                        /* Sunlight zone */
+                        #2E4C8B 28%,
+                        /* Upper twilight */
+                        #1A237E 45%,
+                        /* Mid twilight */
+                        #0F1C3F 65%,
+                        /* Lower twilight */
+                        #0A1428 85%,
+                        /* Target zone */
+                        #000000 100%
+                        /* Deep abyss */
+                    );
+                height: 100vh;
+                overflow: hidden;
+                font-family: 'Inter', sans-serif;
+                position: relative;
+                animation: atmosphericShift 30s ease-in-out infinite;
+            }
+
+            @keyframes atmosphericShift {
+
+                0%,
+                100% {
+                    filter: brightness(1) contrast(1.1);
+                }
+
+                50% {
+                    filter: brightness(0.9) contrast(1.2) hue-rotate(10deg);
+                }
+            }
+
+            /* Advanced sonar grid overlay */
+            .sonar-grid {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image:
+                    radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1) 1px, transparent 1px),
+                    linear-gradient(rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+                background-size: 50px 50px, 25px 25px, 25px 25px;
+                animation: sonarSweep 8s linear infinite;
+                pointer-events: none;
+                z-index: 2;
+            }
+
+            @keyframes sonarSweep {
+                0% {
+                    background-position: 0 0, 0 0, 0 0;
+                }
+
+                100% {
+                    background-position: 50px 50px, 25px 25px, 25px 25px;
+                }
+            }
+
+            /* Dynamic light rays with depth simulation */
+            .light-system {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .light-ray {
+                position: absolute;
+                width: 4px;
+                height: 60%;
+                background: linear-gradient(to bottom,
+                        rgba(255, 255, 200, 0.4) 0%,
+                        rgba(255, 255, 200, 0.2) 30%,
+                        rgba(0, 255, 136, 0.1) 60%,
+                        transparent 100%);
+                transform-origin: top center;
+                animation: rayDance 12s ease-in-out infinite;
+            }
+
+            .light-ray:nth-child(1) {
+                left: 15%;
+                animation-delay: 0s;
+                transform: rotate(-5deg);
+            }
+
+            .light-ray:nth-child(2) {
+                left: 35%;
+                animation-delay: 2s;
+                transform: rotate(3deg);
+            }
+
+            .light-ray:nth-child(3) {
+                left: 55%;
+                animation-delay: 4s;
+                transform: rotate(-2deg);
+            }
+
+            .light-ray:nth-child(4) {
+                left: 75%;
+                animation-delay: 6s;
+                transform: rotate(4deg);
+            }
+
+            @keyframes rayDance {
+
+                0%,
+                100% {
+                    opacity: 0.6;
+                    transform: rotate(-5deg) scaleY(1);
+                }
+
+                25% {
+                    opacity: 0.9;
+                    transform: rotate(2deg) scaleY(0.8);
+                }
+
+                75% {
+                    opacity: 0.3;
+                    transform: rotate(-3deg) scaleY(1.2);
+                }
+            }
+
+            /* Cinematic ROV with advanced lighting */
+            .rov-system {
+                position: absolute;
+                left: 20%;
+                top: 8%;
+                width: 80px;
+                height: 50px;
+                transition: all 7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                z-index: 20;
+                filter: drop-shadow(0 0 20px rgba(255, 68, 68, 0.6));
+            }
+
+            .rov-hull {
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(145deg, #FF4444 0%, #CC3333 50%, #AA2222 100%);
+                border-radius: 12px;
+                position: relative;
+                animation: rovBob 4s ease-in-out infinite;
+                box-shadow:
+                    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                    inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+                    0 0 30px rgba(255, 68, 68, 0.5);
+            }
+
+            .rov-hull::before {
+                content: '';
+                position: absolute;
+                top: 15%;
+                left: 15%;
+                width: 70%;
+                height: 70%;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+                border-radius: 8px;
+            }
+
+            .rov-thrusters {
+                position: absolute;
+                bottom: -8px;
+                left: 10%;
+                width: 80%;
+                height: 6px;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .thruster {
+                width: 15px;
+                height: 100%;
+                background: linear-gradient(to bottom, #666 0%, #333 100%);
+                border-radius: 3px;
+                position: relative;
+            }
+
+            .thruster::after {
+                content: '';
+                position: absolute;
+                bottom: -8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 20px;
+                height: 15px;
+                background: radial-gradient(ellipse, rgba(100, 200, 255, 0.6) 0%, transparent 70%);
+                animation: thrusterBurst 2s ease-in-out infinite alternate;
+            }
+
+            @keyframes thrusterBurst {
+                0% {
+                    opacity: 0.6;
+                    transform: translateX(-50%) scaleY(0.8);
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: translateX(-50%) scaleY(1.3);
+                }
+            }
+
+            .rov-searchlights {
+                position: absolute;
+                bottom: -15px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 150px;
+                height: 100px;
+                background: conic-gradient(from 0deg at 50% 0%,
+                        transparent 0deg,
+                        rgba(255, 255, 200, 0.1) 30deg,
+                        rgba(255, 255, 200, 0.3) 45deg,
+                        rgba(255, 255, 200, 0.1) 60deg,
+                        transparent 90deg);
+                clip-path: polygon(35% 0%, 65% 0%, 100% 100%, 0% 100%);
+                animation: lightSweep 3s ease-in-out infinite alternate;
+            }
+
+            .rov-cable {
+                position: absolute;
+                top: -20px;
+                left: 50%;
+                width: 2px;
+                height: 30px;
+                background: linear-gradient(to bottom, #666 0%, #999 100%);
+                transform: translateX(-50%);
+                animation: cableWave 6s ease-in-out infinite;
+            }
+
+            @keyframes rovBob {
+
+                0%,
+                100% {
+                    transform: translateY(0px) rotate(0deg);
+                }
+
+                25% {
+                    transform: translateY(-4px) rotate(1deg);
+                }
+
+                75% {
+                    transform: translateY(4px) rotate(-1deg);
+                }
+            }
+
+            @keyframes lightSweep {
+                0% {
+                    opacity: 0.4;
+                    transform: translateX(-50%) scaleX(0.8);
+                }
+
+                100% {
+                    opacity: 0.8;
+                    transform: translateX(-50%) scaleX(1.2);
+                }
+            }
+
+            @keyframes cableWave {
+
+                0%,
+                100% {
+                    transform: translateX(-50%) rotate(0deg);
+                }
+
+                50% {
+                    transform: translateX(-50%) rotate(3deg);
+                }
+            }
+
+            .rov-status {
+                position: absolute;
+                top: -35px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-family: 'JetBrains Mono', monospace;
+                color: #FF4444;
+                font-size: 0.8rem;
+                font-weight: bold;
+                text-shadow: 0 0 10px #FF4444;
+                white-space: nowrap;
+                animation: statusBlink 2s ease-in-out infinite;
+            }
+
+            @keyframes statusBlink {
+
+                0%,
+                90% {
+                    opacity: 1;
+                }
+
+                95% {
+                    opacity: 0.3;
+                }
+            }
+
+            /* Revolutionary depth gauge */
+            .depth-command-center {
+                position: absolute;
+                left: 2rem;
+                top: 8%;
+                height: 84%;
+                width: 120px;
+                background: linear-gradient(145deg,
+                        rgba(0, 0, 0, 0.9) 0%,
+                        rgba(0, 20, 40, 0.95) 50%,
+                        rgba(0, 0, 0, 0.9) 100%);
+                border: 3px solid #00E5FF;
+                border-radius: 60px;
+                backdrop-filter: blur(20px);
+                padding: 1.5rem 0;
+                box-shadow:
+                    0 0 30px rgba(0, 229, 255, 0.4),
+                    inset 0 0 20px rgba(0, 229, 255, 0.1);
+                animation: depthGlow 4s ease-in-out infinite;
+                display: flex;
+                flex-direction: column;
+            }
+
+            @keyframes depthGlow {
+
+                0%,
+                100% {
+                    box-shadow: 0 0 30px rgba(0, 229, 255, 0.4), inset 0 0 20px rgba(0, 229, 255, 0.1);
+                }
+
+                50% {
+                    box-shadow: 0 0 50px rgba(0, 229, 255, 0.6), inset 0 0 30px rgba(0, 229, 255, 0.2);
+                }
+            }
+
+            .depth-header {
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            .depth-title {
+                font-family: 'Orbitron', sans-serif;
+                color: #00E5FF;
+                font-size: 0.9rem;
+                font-weight: 700;
+                letter-spacing: 2px;
+                text-shadow: 0 0 15px #00E5FF;
+                margin-bottom: 0.5rem;
+            }
+
+            .depth-readout {
+                font-family: 'JetBrains Mono', monospace;
+                color: #FF4444;
+                font-size: 1.2rem;
+                font-weight: 900;
+                text-shadow: 0 0 10px #FF4444;
+                animation: readoutUpdate 1s ease-in-out infinite;
+            }
+
+            @keyframes readoutUpdate {
+
+                0%,
+                90% {
+                    opacity: 1;
+                }
+
+                95% {
+                    opacity: 0.7;
+                }
+            }
+
+            .depth-scale {
+                flex: 1;
+                width: 100%;
+                position: relative;
+                margin: 1rem 0;
+                height: calc(100% - 120px);
+                /* Give explicit height minus header space */
+                min-height: 400px;
+                /* Ensure minimum height */
+            }
+
+            .depth-marker {
+                position: absolute;
+                right: 10px;
+                width: 50px;
+                height: 3px;
+                background: linear-gradient(90deg, #00E5FF 0%, rgba(0, 229, 255, 0.3) 100%);
+                border-radius: 2px;
+                box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+            }
+
+            .depth-label {
+                position: absolute;
+                right: 65px;
+                font-family: 'JetBrains Mono', monospace;
+                color: #E3F2FD;
+                font-size: 0.7rem;
+                font-weight: 600;
+                text-shadow: 0 0 5px rgba(227, 242, 253, 0.8);
+                white-space: nowrap;
+                transform: translateY(-50%);
+            }
+
+            .depth-indicator {
+                position: absolute;
+                left: 5px;
+                top: 0%;
+                /* Start at surface */
+                width: 110px;
+                height: 8px;
+                background: linear-gradient(90deg, #FF4444 0%, #FF6B6B 50%, #FF4444 100%);
+                border-radius: 4px;
+                box-shadow: 0 0 20px #FF4444;
+                animation: indicatorPulse 2s ease-in-out infinite;
+                transition: top 7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            @keyframes indicatorPulse {
+
+                0%,
+                100% {
+                    opacity: 0.8;
+                    transform: scaleX(1);
+                }
+
+                50% {
+                    opacity: 1;
+                    transform: scaleX(1.1);
+                    box-shadow: 0 0 30px #FF4444;
+                }
+            }
+
+            /* Next-level mission zones */
+            .mission-control {
+                position: absolute;
+                right: 4%;
+                top: 8%;
+                width: 480px;
+                height: 84%;
+                perspective: 1000px;
+            }
+
+            .zone-card {
+                position: absolute;
+                width: 100%;
+                background: linear-gradient(145deg,
+                        rgba(15, 28, 63, 0.2) 0%,
+                        rgba(15, 28, 63, 0.6) 50%,
+                        rgba(15, 28, 63, 0.2) 100%);
+                backdrop-filter: blur(30px);
+                border: 2px solid rgba(0, 229, 255, 0.3);
+                border-radius: 20px;
+                padding: 2.5rem;
+                opacity: 0;
+                transform: translateX(100px) rotateY(20deg) scale(0.9);
+                transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                box-shadow:
+                    0 10px 40px rgba(0, 0, 0, 0.4),
+                    0 0 20px rgba(0, 229, 255, 0.1);
+            }
+
+            .zone-card.active {
+                opacity: 1;
+                transform: translateX(0) rotateY(0deg) scale(1);
+                border-color: rgba(0, 229, 255, 0.8);
+                background: linear-gradient(145deg,
+                        rgba(15, 28, 63, 0.4) 0%,
+                        rgba(15, 28, 63, 0.8) 50%,
+                        rgba(15, 28, 63, 0.4) 100%);
+            }
+
+            .zone-card:hover {
+                transform: translateX(-20px) rotateY(-5deg) scale(1.03);
+                border-color: #00FF88;
+                box-shadow:
+                    0 15px 50px rgba(0, 0, 0, 0.5),
+                    0 0 40px rgba(0, 255, 136, 0.3);
+            }
+
+            .zone-name {
+                font-family: 'Orbitron', sans-serif;
+                color: #00E5FF;
+                font-size: 1.8rem;
+                font-weight: 700;
+                margin-bottom: 0.8rem;
+                text-shadow: 0 0 15px #00E5FF;
+                animation: titleShimmer 4s ease-in-out infinite;
+            }
+
+            @keyframes titleShimmer {
+
+                0%,
+                100% {
+                    text-shadow: 0 0 15px #00E5FF;
+                }
+
+                50% {
+                    text-shadow: 0 0 25px #00E5FF, 0 0 35px #00E5FF;
+                }
+            }
+
+            .zone-depth {
+                font-family: 'JetBrains Mono', monospace;
+                color: #81C784;
+                font-size: 1.1rem;
+                margin-bottom: 1.2rem;
+                font-weight: 600;
+                text-shadow: 0 0 8px #81C784;
+            }
+
+            .zone-description {
+                color: #E3F2FD;
+                font-size: 1.1rem;
+                line-height: 1.6;
+                margin-bottom: 1.5rem;
+                text-shadow: 0 0 5px rgba(227, 242, 253, 0.5);
+            }
+
+            .zone-creatures {
+                display: flex;
+                gap: 0.8rem;
+                flex-wrap: wrap;
+            }
+
+            .creature-tag {
+                background: linear-gradient(145deg,
+                        rgba(0, 229, 255, 0.2) 0%,
+                        rgba(0, 229, 255, 0.4) 100%);
+                color: #00E5FF;
+                padding: 0.6rem 1.2rem;
+                border-radius: 25px;
+                font-size: 0.9rem;
+                border: 2px solid rgba(0, 229, 255, 0.5);
+                font-weight: 600;
+                transition: all 0.4s ease;
+                box-shadow: 0 4px 15px rgba(0, 229, 255, 0.2);
+            }
+
+            .creature-tag:hover {
+                background: linear-gradient(145deg,
+                        rgba(0, 229, 255, 0.4) 0%,
+                        rgba(0, 229, 255, 0.6) 100%);
+                transform: translateY(-3px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(0, 229, 255, 0.4);
+            }
+
+            .creature-tag.target {
+                background: linear-gradient(145deg,
+                        rgba(255, 68, 68, 0.3) 0%,
+                        rgba(255, 68, 68, 0.6) 100%);
+                color: #FF6B6B;
+                border-color: rgba(255, 68, 68, 0.6);
+                animation: targetPulse 3s ease-in-out infinite;
+            }
+
+            @keyframes targetPulse {
+
+                0%,
+                100% {
+                    box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+                }
+
+                50% {
+                    box-shadow: 0 8px 30px rgba(255, 68, 68, 0.6), 0 0 20px rgba(255, 68, 68, 0.4);
+                }
+            }
+
+            /* Epic title system */
+            .mission-title {
+                position: absolute;
+                top: 35%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                z-index: 15;
+            }
+
+            .main-title {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 4.8rem;
+                font-weight: 900;
+                color: #E3F2FD;
+                text-shadow:
+                    0 0 20px #00E5FF,
+                    0 0 40px #00E5FF,
+                    0 0 60px #00E5FF;
+                margin-bottom: 1rem;
+                animation: epicTitle 8s ease-in-out infinite;
+                letter-spacing: 6px;
+            }
+
+            @keyframes epicTitle {
+
+                0%,
+                100% {
+                    opacity: 0.9;
+                    transform: translate(-50%, -50%) scale(1) rotateX(0deg);
+                    text-shadow: 0 0 20px #00E5FF, 0 0 40px #00E5FF, 0 0 60px #00E5FF;
+                }
+
+                50% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1.05) rotateX(5deg);
+                    text-shadow: 0 0 30px #00E5FF, 0 0 60px #00E5FF, 0 0 80px #00E5FF;
+                }
+            }
+
+            .subtitle {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 1.6rem;
+                color: #FF6B6B;
+                font-weight: 400;
+                letter-spacing: 4px;
+                text-transform: uppercase;
+                text-shadow: 0 0 15px #FF6B6B;
+                animation: subtitleGlow 3s ease-in-out infinite alternate;
+            }
+
+            @keyframes subtitleGlow {
+                0% {
+                    opacity: 0.8;
+                    text-shadow: 0 0 15px #FF6B6B;
+                }
+
+                100% {
+                    opacity: 1;
+                    text-shadow: 0 0 25px #FF6B6B, 0 0 35px #FF6B6B;
+                }
+            }
+
+            /* Advanced particle systems */
+            .particle-system {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                overflow: hidden;
+            }
+
+            .marine-particle {
+                position: absolute;
+                border-radius: 50%;
+                animation: particleFlow 25s linear infinite;
+            }
+
+            .marine-particle.snow {
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.2) 70%, transparent 100%);
+            }
+
+            .marine-particle.bio {
+                background: radial-gradient(circle, rgba(0, 255, 136, 0.9) 0%, rgba(0, 255, 136, 0.3) 70%, transparent 100%);
+                animation-duration: 30s;
+            }
+
+            .marine-particle.deep {
+                background: radial-gradient(circle, rgba(0, 229, 255, 0.7) 0%, rgba(0, 229, 255, 0.2) 70%, transparent 100%);
+                animation-duration: 35s;
+            }
+
+            /* Generate multiple particles */
+            .marine-particle:nth-child(1) {
+                width: 3px;
+                height: 3px;
+                left: 8%;
+                animation-delay: 0s;
+            }
+
+            .marine-particle:nth-child(2) {
+                width: 5px;
+                height: 5px;
+                left: 22%;
+                animation-delay: 3s;
+            }
+
+            .marine-particle:nth-child(3) {
+                width: 2px;
+                height: 2px;
+                left: 38%;
+                animation-delay: 6s;
+            }
+
+            .marine-particle:nth-child(4) {
+                width: 4px;
+                height: 4px;
+                left: 54%;
+                animation-delay: 9s;
+            }
+
+            .marine-particle:nth-child(5) {
+                width: 6px;
+                height: 6px;
+                left: 68%;
+                animation-delay: 12s;
+            }
+
+            .marine-particle:nth-child(6) {
+                width: 3px;
+                height: 3px;
+                left: 82%;
+                animation-delay: 15s;
+            }
+
+            .marine-particle:nth-child(7) {
+                width: 2px;
+                height: 2px;
+                left: 16%;
+                animation-delay: 18s;
+            }
+
+            .marine-particle:nth-child(8) {
+                width: 4px;
+                height: 4px;
+                left: 76%;
+                animation-delay: 21s;
+            }
+
+            @keyframes particleFlow {
+                0% {
+                    transform: translateY(-100vh) translateX(0px) rotate(0deg) scale(0.5);
+                    opacity: 0;
+                }
+
+                5% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.8;
+                    transform: translateY(50vh) translateX(30px) rotate(180deg) scale(1.2);
+                }
+
+                95% {
+                    opacity: 0.3;
+                }
+
+                100% {
+                    transform: translateY(120vh) translateX(-20px) rotate(360deg) scale(0.3);
+                    opacity: 0;
+                }
+            }
+
+            /* Command center HUD */
+            .command-hud {
+                position: absolute;
+                top: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                gap: 3rem;
+                z-index: 25;
+            }
+
+            .hud-panel {
+                text-align: center;
+                background: linear-gradient(145deg,
+                        rgba(0, 0, 0, 0.8) 0%,
+                        rgba(0, 20, 40, 0.9) 50%,
+                        rgba(0, 0, 0, 0.8) 100%);
+                padding: 1.2rem 2rem;
+                border-radius: 12px;
+                border: 2px solid #FF4444;
+                backdrop-filter: blur(15px);
+                box-shadow:
+                    0 0 25px rgba(255, 68, 68, 0.3),
+                    inset 0 0 15px rgba(255, 68, 68, 0.1);
+                animation: hudGlow 4s ease-in-out infinite;
+            }
+
+            @keyframes hudGlow {
+
+                0%,
+                100% {
+                    box-shadow: 0 0 30px rgba(255, 68, 68, 0.3), inset 0 0 20px rgba(255, 68, 68, 0.1);
+                }
+
+                50% {
+                    box-shadow: 0 0 50px rgba(255, 68, 68, 0.5), inset 0 0 30px rgba(255, 68, 68, 0.2);
+                }
+            }
+
+            .hud-value {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 1.8rem;
+                color: #FF4444;
+                font-weight: 900;
+                line-height: 1;
+                text-shadow: 0 0 15px #FF4444;
+                animation: valueFlicker 2s ease-in-out infinite;
+            }
+
+            @keyframes valueFlicker {
+
+                0%,
+                95% {
+                    opacity: 1;
+                }
+
+                98% {
+                    opacity: 0.7;
+                }
+            }
+
+            .hud-label {
+                font-family: 'JetBrains Mono', monospace;
+                color: #E3F2FD;
+                font-size: 0.7rem;
+                margin-top: 0.5rem;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                text-shadow: 0 0 8px rgba(227, 242, 253, 0.5);
+            }
+
+            /* Enhanced Colossal squid with 8 tentacles */
+            .deep-squid {
+                position: absolute;
+                bottom: 8%;
+                left: 30%;
+                width: 180px;
+                height: 100px;
+                opacity: 0.4;
+                animation: squidFloat 20s ease-in-out infinite;
+                z-index: 8;
+            }
+
+            .squid-body {
+                width: 80px;
+                height: 40px;
+                background: linear-gradient(145deg,
+                        rgba(100, 150, 200, 0.3) 0%,
+                        rgba(60, 120, 180, 0.4) 30%,
+                        rgba(80, 140, 200, 0.5) 50%,
+                        rgba(60, 120, 180, 0.4) 70%,
+                        rgba(100, 150, 200, 0.3) 100%);
+                border-radius: 50% 20% 50% 20%;
+                position: relative;
+                filter: blur(0.5px);
+                border: 1px solid rgba(80, 140, 200, 0.3);
+                margin-left: 50px;
+            }
+
+            /* All 8 tentacles container */
+            .tentacles-container {
+                position: absolute;
+                left: -60px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 80px;
+                height: 60px;
+            }
+
+            /* Individual tentacle styling */
+            .tentacle {
+                position: absolute;
+                left: 0;
+                width: 50px;
+                height: 4px;
+                background: linear-gradient(to left,
+                        rgba(80, 140, 200, 0.4) 0%,
+                        rgba(60, 120, 180, 0.3) 30%,
+                        rgba(80, 140, 200, 0.2) 70%,
+                        transparent 100%);
+                border-radius: 2px;
+                transform-origin: right center;
+            }
+
+            /* Positioning 8 tentacles in a radial pattern */
+            .tentacle:nth-child(1) {
+                top: 5px;
+                transform: rotate(-20deg);
+                animation: tentacleWave1 8s ease-in-out infinite;
+            }
+
+            .tentacle:nth-child(2) {
+                top: 12px;
+                transform: rotate(-10deg);
+                animation: tentacleWave2 9s ease-in-out infinite;
+            }
+
+            .tentacle:nth-child(3) {
+                top: 19px;
+                transform: rotate(0deg);
+                animation: tentacleWave3 7s ease-in-out infinite;
+            }
+
+            .tentacle:nth-child(4) {
+                top: 26px;
+                transform: rotate(5deg);
+                animation: tentacleWave4 10s ease-in-out infinite;
+                /* Middle tentacle with hooks */
+                width: 60px;
+                background: linear-gradient(to left,
+                        rgba(80, 140, 200, 0.5) 0%,
+                        rgba(60, 120, 180, 0.4) 30%,
+                        rgba(80, 140, 200, 0.3) 70%,
+                        transparent 100%);
+            }
+
+            .tentacle:nth-child(5) {
+                top: 33px;
+                transform: rotate(10deg);
+                animation: tentacleWave5 8.5s ease-in-out infinite;
+                /* Middle tentacle with hooks */
+                width: 60px;
+                background: linear-gradient(to left,
+                        rgba(80, 140, 200, 0.5) 0%,
+                        rgba(60, 120, 180, 0.4) 30%,
+                        rgba(80, 140, 200, 0.3) 70%,
+                        transparent 100%);
+            }
+
+            .tentacle:nth-child(6) {
+                top: 40px;
+                transform: rotate(15deg);
+                animation: tentacleWave6 9.5s ease-in-out infinite;
+            }
+
+            .tentacle:nth-child(7) {
+                top: 47px;
+                transform: rotate(20deg);
+                animation: tentacleWave7 7.5s ease-in-out infinite;
+            }
+
+            .tentacle:nth-child(8) {
+                top: 54px;
+                transform: rotate(25deg);
+                animation: tentacleWave8 11s ease-in-out infinite;
+            }
+
+            /* Sharp hooks for middle tentacles (4th and 5th) */
+            .tentacle:nth-child(4)::after,
+            .tentacle:nth-child(5)::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                width: 40px;
+                height: 100%;
+                transform: translateY(-50%);
+                background-image:
+                    radial-gradient(circle at 10px 50%, rgba(255, 100, 100, 0.8) 1px, transparent 2px),
+                    radial-gradient(circle at 20px 50%, rgba(255, 100, 100, 0.8) 1px, transparent 2px),
+                    radial-gradient(circle at 30px 50%, rgba(255, 100, 100, 0.8) 1px, transparent 2px);
+                background-size: 10px 10px;
+                background-repeat: no-repeat;
+            }
+
+            /* Additional sharp hook details */
+            .tentacle:nth-child(4)::before,
+            .tentacle:nth-child(5)::before {
+                content: '';
+                position: absolute;
+                left: 5px;
+                top: 0;
+                width: 35px;
+                height: 100%;
+                background: repeating-linear-gradient(to left,
+                        transparent,
+                        transparent 4px,
+                        rgba(255, 120, 120, 0.6) 4px,
+                        rgba(255, 120, 120, 0.6) 5px);
+                mask: linear-gradient(to left, transparent 0%, black 20%, black 80%, transparent 100%);
+                -webkit-mask: linear-gradient(to left, transparent 0%, black 20%, black 80%, transparent 100%);
+            }
+
+            /* Individual tentacle animations */
+            @keyframes tentacleWave1 {
+
+                0%,
+                100% {
+                    transform: rotate(-20deg) translateX(0px);
+                }
+
+                25% {
+                    transform: rotate(-18deg) translateX(-3px);
+                }
+
+                75% {
+                    transform: rotate(-22deg) translateX(2px);
+                }
+            }
+
+            @keyframes tentacleWave2 {
+
+                0%,
+                100% {
+                    transform: rotate(-10deg) translateX(0px);
+                }
+
+                30% {
+                    transform: rotate(-8deg) translateX(-2px);
+                }
+
+                70% {
+                    transform: rotate(-12deg) translateX(3px);
+                }
+            }
+
+            @keyframes tentacleWave3 {
+
+                0%,
+                100% {
+                    transform: rotate(0deg) translateX(0px);
+                }
+
+                35% {
+                    transform: rotate(2deg) translateX(-2px);
+                }
+
+                65% {
+                    transform: rotate(-2deg) translateX(2px);
+                }
+            }
+
+            @keyframes tentacleWave4 {
+
+                0%,
+                100% {
+                    transform: rotate(5deg) translateX(0px) scaleX(1);
+                }
+
+                20% {
+                    transform: rotate(7deg) translateX(-4px) scaleX(1.05);
+                }
+
+                40% {
+                    transform: rotate(3deg) translateX(2px) scaleX(0.95);
+                }
+
+                60% {
+                    transform: rotate(6deg) translateX(-3px) scaleX(1.02);
+                }
+
+                80% {
+                    transform: rotate(4deg) translateX(1px) scaleX(0.98);
+                }
+            }
+
+            @keyframes tentacleWave5 {
+
+                0%,
+                100% {
+                    transform: rotate(10deg) translateX(0px) scaleX(1);
+                }
+
+                15% {
+                    transform: rotate(12deg) translateX(-3px) scaleX(1.03);
+                }
+
+                45% {
+                    transform: rotate(8deg) translateX(3px) scaleX(0.97);
+                }
+
+                70% {
+                    transform: rotate(11deg) translateX(-2px) scaleX(1.01);
+                }
+
+                85% {
+                    transform: rotate(9deg) translateX(1px) scaleX(0.99);
+                }
+            }
+
+            @keyframes tentacleWave6 {
+
+                0%,
+                100% {
+                    transform: rotate(15deg) translateX(0px);
+                }
+
+                40% {
+                    transform: rotate(17deg) translateX(-2px);
+                }
+
+                75% {
+                    transform: rotate(13deg) translateX(2px);
+                }
+            }
+
+            @keyframes tentacleWave7 {
+
+                0%,
+                100% {
+                    transform: rotate(20deg) translateX(0px);
+                }
+
+                25% {
+                    transform: rotate(22deg) translateX(-3px);
+                }
+
+                65% {
+                    transform: rotate(18deg) translateX(2px);
+                }
+            }
+
+            @keyframes tentacleWave8 {
+
+                0%,
+                100% {
+                    transform: rotate(25deg) translateX(0px);
+                }
+
+                35% {
+                    transform: rotate(27deg) translateX(-2px);
+                }
+
+                70% {
+                    transform: rotate(23deg) translateX(3px);
+                }
+            }
+
+            .squid-eyes {
+                position: absolute;
+                top: 30%;
+                right: 25%;
+                width: 10px;
+                height: 10px;
+                background: rgba(255, 180, 80, 0.7);
+                border-radius: 50%;
+                box-shadow: 0 0 10px rgba(255, 180, 80, 0.5);
+            }
+
+            .squid-eyes::after {
+                content: '';
+                position: absolute;
+                top: -2px;
+                right: -14px;
+                width: 12px;
+                height: 12px;
+                background: rgba(255, 180, 80, 0.7);
+                border-radius: 50%;
+                box-shadow: 0 0 12px rgba(255, 180, 80, 0.5);
+            }
+
+            @keyframes squidFloat {
+
+                0%,
+                100% {
+                    transform: translateX(0px) translateY(0px) rotate(0deg);
+                    opacity: 0.3;
+                }
+
+                25% {
+                    transform: translateX(200px) translateY(-30px) rotate(5deg);
+                    opacity: 0.5;
+                }
+
+                50% {
+                    transform: translateX(400px) translateY(-10px) rotate(-3deg);
+                    opacity: 0.4;
+                }
+
+                75% {
+                    transform: translateX(200px) translateY(-40px) rotate(2deg);
+                    opacity: 0.45;
+                }
+            }
+
+            @keyframes tentacleWave {
+
+                0%,
+                100% {
+                    transform: translateY(-50%) scaleY(1) skewX(0deg);
+                }
+
+                25% {
+                    transform: translateY(-50%) scaleY(1.1) skewX(3deg);
+                }
+
+                75% {
+                    transform: translateY(-50%) scaleY(0.9) skewX(-2deg);
+                }
+            }
+
+            @keyframes feedingTentacleWave {
+
+                0%,
+                100% {
+                    transform: translateY(-50%) scaleX(1) rotate(0deg);
+                }
+
+                30% {
+                    transform: translateY(-50%) scaleX(1.1) rotate(2deg);
+                }
+
+                70% {
+                    transform: translateY(-50%) scaleX(0.9) rotate(-3deg);
+                }
+            }
+
+            @media (max-width: 1400px) {
+                .mission-control {
+                    width: 400px;
+                }
+
+                .main-title {
+                    font-size: 4rem;
+                }
+            }
+
+            @media (max-width: 1200px) {
+                .mission-control {
+                    width: 350px;
+                }
+
+                .depth-command-center {
+                    left: 1.5rem;
+                    width: 100px;
+                }
+
+                .main-title {
+                    font-size: 3.5rem;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .mission-control {
+                    right: 2%;
+                    width: 300px;
+                    top: 10%;
+                    height: 80%;
+                }
+
+                .depth-command-center {
+                    left: 1rem;
+                    width: 80px;
+                    height: 80%;
+                }
+
+                .main-title {
+                    font-size: 3rem;
+                    letter-spacing: 3px;
+                }
+
+                .subtitle {
+                    font-size: 1.2rem;
+                    letter-spacing: 2px;
+                }
+
+                .command-hud {
+                    flex-wrap: wrap;
+                    gap: 1.5rem;
+                    justify-content: center;
+                }
+
+                .hud-panel {
+                    padding: 1rem 1.5rem;
+                }
+
+                .hud-value {
+                    font-size: 1.4rem;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Advanced sonar grid -->
+        <div class="sonar-grid"></div>
+
+        <!-- Dynamic light system -->
+        <div class="light-system">
+            <div class="light-ray"></div>
+            <div class="light-ray"></div>
+            <div class="light-ray"></div>
+            <div class="light-ray"></div>
+        </div>
+
+        <!-- Colossal squid in the depths -->
+        <div class="deep-squid">
+            <div class="squid-body">
+                <div class="tentacles-container">
+                    <div class="tentacle"></div>
+                    <div class="tentacle"></div>
+                    <div class="tentacle"></div>
+                    <div class="tentacle"></div>
+                    <div class="tentacle"></div>
+                    <div class="tentacle"></div>
+                    <div class="tentacle"></div>
+                    <div class="tentacle"></div>
+                </div>
+                <div class="squid-eyes"></div>
+            </div>
+        </div>
+
+        <!-- Revolutionary depth command center -->
+        <div class="depth-command-center">
+            <div class="depth-header">
+                <div class="depth-title">DEPTH CONTROL</div>
+                <div class="depth-readout" id="depthReadout">000m</div>
+            </div>
+            <div class="depth-scale">
+                <!-- Enhanced depth markers -->
+                <div class="depth-marker" style="top: 0%;"></div>
+                <div class="depth-label" style="top: 0%;">SURFACE</div>
+
+                <div class="depth-marker" style="top: 20%;"></div>
+                <div class="depth-label" style="top: 20%;">100m</div>
+
+                <div class="depth-marker" style="top: 40%;"></div>
+                <div class="depth-label" style="top: 40%;">300m</div>
+
+                <div class="depth-marker" style="top: 70%;"></div>
+                <div class="depth-label" style="top: 70%;">500m</div>
+
+                <div class="depth-marker" style="top: 100%;"></div>
+                <div class="depth-label" style="top: 100%;">TARGET 600m</div>
+
+                <!-- Dynamic depth indicator -->
+                <div class="depth-indicator" id="depthIndicator"></div>
+            </div>
+        </div>
+
+        <!-- Next-level mission control -->
+        <div class="mission-control">
+            <!-- Surface Operations -->
+            <div class="zone-card active" style="top: 0%;" id="zone1">
+                <div class="zone-name">Surface Operations</div>
+                <div class="zone-depth">0 - 50m depth</div>
+                <div class="zone-description">
+                    R/V Falkor (too) deploys ROV SuBastian into the frigid Southern Ocean. Beginning historic descent to
+                    discover the unknown.
+                </div>
+                <div class="zone-creatures">
+                    <span class="creature-tag">ROV Deployment</span>
+                    <span class="creature-tag">Krill Swarms</span>
+                    <span class="creature-tag">Surface Currents</span>
+                </div>
+            </div>
+
+            <!-- Sunlight Fade -->
+            <div class="zone-card" style="top: 16%;" id="zone2">
+                <div class="zone-name">Sunlight Fade Zone</div>
+                <div class="zone-depth">50 - 200m depth</div>
+                <div class="zone-description">
+                    Light rapidly diminishes as we descend. ROV cameras switch to low-light mode. Water temperature
+                    begins dropping significantly.
+                </div>
+                <div class="zone-creatures">
+                    <span class="creature-tag">Lanternfish</span>
+                    <span class="creature-tag">Copepods</span>
+                    <span class="creature-tag">Small Jellies</span>
+                </div>
+            </div>
+
+            <!-- Twilight Entry -->
+            <div class="zone-card" style="top: 32%;" id="zone3">
+                <div class="zone-name">Mesopelagic Zone</div>
+                <div class="zone-depth">200 - 400m depth</div>
+                <div class="zone-description">
+                    Entering the twilight zone. First bioluminescent organisms appear. Water temperature approaches
+                    freezing. Pressure increases to 31 atmospheres.
+                </div>
+                <div class="zone-creatures">
+                    <span class="creature-tag">Glass Squids</span>
+                    <span class="creature-tag">Vampire Squid</span>
+                    <span class="creature-tag">Deep Krill</span>
+                </div>
+            </div>
+
+            <!-- Critical Approach -->
+            <div class="zone-card" style="top: 48%;" id="zone4">
+                <div class="zone-name">Target Approach Zone</div>
+                <div class="zone-depth">400 - 550m depth</div>
+                <div class="zone-description">
+                    Approaching colossal squid habitat. Marine snow increases dramatically. ROV lights pierce the
+                    darkness. Optimal hunting depth for juvenile specimens.
+                </div>
+                <div class="zone-creatures">
+                    <span class="creature-tag">Siphonophores</span>
+                    <span class="creature-tag">Deep Jellies</span>
+                    <span class="creature-tag">Antarctic Krill</span>
+                </div>
+            </div>
+
+            <!-- Discovery Zone -->
+            <div class="zone-card" style="top: 64%;" id="zone5">
+                <div class="zone-name">Discovery Zone</div>
+                <div class="zone-depth">550 - 600m depth</div>
+                <div class="zone-description">
+                    Target depth achieved. Historic encounter zone where 30cm juvenile colossal squid was filmed alive
+                    for the first time in scientific history.
+                </div>
+                <div class="zone-creatures">
+                    <span class="creature-tag target">Colossal Squid</span>
+                    <span class="creature-tag">G. glacialis</span>
+                    <span class="creature-tag">Toothfish</span>
+                </div>
+            </div>
+
+            <!-- The Abyss Beyond -->
+            <div class="zone-card" style="top: 80%;" id="zone6">
+                <div class="zone-name">Abyssal Waters</div>
+                <div class="zone-depth">600m+ depth</div>
+                <div class="zone-description">
+                    Beyond target depth lies the infinite abyss. Adult colossal squids inhabit these depths - specimens
+                    reaching 700kg with eyes 35cm in diameter.
+                </div>
+                <div class="zone-creatures">
+                    <span class="creature-tag">Adult Colossal Squids</span>
+                    <span class="creature-tag">Sperm Whales</span>
+                    <span class="creature-tag">Unknown Species</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Epic mission title -->
+        <div class="mission-title">
+            <h1 class="main-title">DESCENT TO DISCOVERY</h1>
+            <p class="subtitle">MARCH 9, 2025</p>
+        </div>
+
+        <!-- Command center HUD -->
+        <div class="command-hud">
+            <div class="hud-panel">
+                <div class="hud-value" id="targetDepth">600m</div>
+                <div class="hud-label">Target Depth</div>
+            </div>
+            <div class="hud-panel">
+                <div class="hud-value" id="waterTemp">-0.9°C</div>
+                <div class="hud-label">Water Temp</div>
+            </div>
+            <div class="hud-panel">
+                <div class="hud-value" id="missionTime">100</div>
+                <div class="hud-label">Years Waiting</div>
+            </div>
+            <div class="hud-panel">
+                <div class="hud-value" id="pressure">61 ATM</div>
+                <div class="hud-label">Pressure</div>
+            </div>
+        </div>
+
+        <!-- Advanced particle systems -->
+        <div class="particle-system">
+            <div class="marine-particle snow"></div>
+            <div class="marine-particle snow"></div>
+            <div class="marine-particle bio"></div>
+            <div class="marine-particle deep"></div>
+            <div class="marine-particle snow"></div>
+            <div class="marine-particle bio"></div>
+            <div class="marine-particle deep"></div>
+            <div class="marine-particle snow"></div>
+        </div>
+
+        <!-- Cinematic ROV system -->
+        <div class="rov-system" id="rovSystem">
+            <div class="rov-hull">
+                <div class="rov-thrusters">
+                    <div class="thruster"></div>
+                    <div class="thruster"></div>
+                    <div class="thruster"></div>
+                </div>
+                <div class="rov-searchlights"></div>
+                <div class="rov-cable"></div>
+            </div>
+            <div class="rov-status" id="rovStatus">ROV SuBastian • ONLINE</div>
+        </div>
+
+        <script>
+            // Advanced mission control system
+            let currentZone = 1;
+            const maxZones = 6;
+            let missionPhase = 0;
+            let isAnimating = false; // Prevent overlapping animations
+
+            // Depth simulation data
+            const depthData = [
+                { depth: 0, temp: 2.1, pressure: 1, status: "Surface Deployment" },
+                { depth: 125, temp: 0.8, pressure: 13, status: "Light Fade Zone" },
+                { depth: 300, temp: -0.2, pressure: 31, status: "Twilight Entry" },
+                { depth: 475, temp: -0.6, pressure: 48, status: "Target Approach" },
+                { depth: 600, temp: -0.9, pressure: 61, status: "DISCOVERY!" },
+                { depth: 750, temp: -1.1, pressure: 76, status: "Abyss Beyond" }
+            ];
+
+            // ROV status messages
+            const rovMessages = [
+                "ROV SuBastian • DEPLOYING",
+                "ROV SuBastian • DESCENDING",
+                "ROV SuBastian • SCANNING",
+                "ROV SuBastian • TARGET ACQUIRED",
+                "ROV SuBastian • RECORDING!",
+                "ROV SuBastian • MISSION SUCCESS"
+            ];
+
+            function executeAdvancedDescent() {
+                // Prevent overlapping animations
+                if (isAnimating) {
+                    console.log(`[DEBUG] Animation in progress, skipping...`);
+                    return;
+                }
+                isAnimating = true;
+
+                console.log(`[DEBUG] Starting descent from zone ${currentZone} to zone ${currentZone % maxZones + 1}`);
+
+                // Hide current zone with advanced animation
+                const currentCard = document.getElementById(`zone${currentZone}`);
+                currentCard.classList.remove('active');
+
+                // Calculate next mission phase
+                const nextZone = currentZone % maxZones + 1;
+                const rovPositions = [8, 22, 38, 58, 78, 95]; // Enhanced positions
+                const currentData = depthData[nextZone - 1];
+
+                console.log(`[DEBUG] ROV will move to position: ${rovPositions[nextZone - 1]}%`);
+
+                // Update ROV position with cinematic timing
+                const rovSystem = document.getElementById('rovSystem');
+                const rovCurrentTop = parseFloat(window.getComputedStyle(rovSystem).top) / window.innerHeight * 100;
+                console.log(`[DEBUG] ROV current position: ${rovCurrentTop.toFixed(2)}%`);
+                rovSystem.style.top = `${rovPositions[nextZone - 1]}%`;
+
+                // Dynamic depth readout animation
+                animateDepthCounter(depthData[currentZone - 1]?.depth || 0, currentData.depth);
+
+                // Update depth indicator position - synchronized with ROV
+                const depthIndicator = document.getElementById('depthIndicator');
+                const depthScale = document.querySelector('.depth-scale');
+                const indicatorPositions = [0, 20, 40, 70, 100, 100]; // Adjusted to match depth markers
+
+                // Enhanced debug logging
+                console.log(`[DEBUG] Depth indicator element:`, depthIndicator);
+                console.log(`[DEBUG] Depth scale element:`, depthScale);
+
+                if (!depthIndicator) {
+                    console.error(`[ERROR] Depth indicator element not found!`);
+                    return;
+                }
+
+                if (!depthScale) {
+                    console.error(`[ERROR] Depth scale element not found!`);
+                    return;
+                }
+
+                // Get current position safely
+                let indicatorCurrentTop = 0;
+                const currentStyle = window.getComputedStyle(depthIndicator);
+                const currentTopPx = parseFloat(currentStyle.top) || 0;
+                const parentHeight = depthScale.offsetHeight;
+
+                console.log(`[DEBUG] Parent height:`, parentHeight);
+                console.log(`[DEBUG] Current top px:`, currentTopPx);
+                console.log(`[DEBUG] Current computed style:`, currentStyle.top);
+                console.log(`[DEBUG] Transition property:`, currentStyle.transition);
+
+                if (parentHeight > 0) {
+                    indicatorCurrentTop = (currentTopPx / parentHeight) * 100;
+                }
+
+                console.log(`[DEBUG] Depth indicator current position: ${indicatorCurrentTop.toFixed(2)}%`);
+                console.log(`[DEBUG] Depth indicator will move to: ${indicatorPositions[nextZone - 1]}%`);
+
+                // Force a reflow before changing position to ensure transition works
+                depthIndicator.offsetHeight;
+
+                // Set the new position
+                depthIndicator.style.top = `${indicatorPositions[nextZone - 1]}%`;
+
+                // Verify the change was applied
+                setTimeout(() => {
+                    const newStyle = window.getComputedStyle(depthIndicator);
+                    console.log(`[DEBUG] After setting - new top value:`, newStyle.top);
+                    console.log(`[DEBUG] After setting - element offsetTop:`, depthIndicator.offsetTop);
+                }, 100);
+
+                // Reset animation flag after transition completes
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 7000); // Match the 7s transition duration
+
+                // Update environmental data
+                setTimeout(() => {
+                    document.getElementById('waterTemp').textContent = `${currentData.temp}°C`;
+                    document.getElementById('pressure').textContent = `${currentData.pressure} ATM`;
+                    document.getElementById('rovStatus').textContent = rovMessages[nextZone - 1];
+                }, 1000);
+
+                // Update mission phase
+                currentZone = nextZone;
+                missionPhase++;
+
+                // Activate next zone with enhanced timing
+                setTimeout(() => {
+                    const nextCard = document.getElementById(`zone${currentZone}`);
+                    nextCard.classList.add('active');
+
+                    // Special effects for critical moments
+                    if (currentZone === 5) {
+                        // Discovery zone special effects
+                        document.body.style.animation = 'atmosphericShift 2s ease-in-out, discoveryFlash 1s ease-out';
+                        setTimeout(() => {
+                            document.body.style.animation = 'atmosphericShift 30s ease-in-out infinite';
+                        }, 2000);
+
+                        // Enhanced ROV glow for discovery
+                        const rovHull = document.querySelector('.rov-hull');
+                        rovHull.style.boxShadow = `
+                        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                        inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+                        0 0 60px rgba(255, 68, 68, 0.8),
+                        0 0 100px rgba(0, 255, 136, 0.4)
+                    `;
+                    }
+
+                    // Abyss zone atmospheric change
+                    if (currentZone === 6) {
+                        document.body.style.filter = 'brightness(0.7) contrast(1.3) hue-rotate(15deg)';
+                    }
+                }, 300);
+            }
+
+            // Animated depth counter
+            function animateDepthCounter(fromDepth, toDepth) {
+                const depthReadout = document.getElementById('depthReadout');
+                const duration = 2000; // 2 seconds
+                const startTime = performance.now();
+
+                function updateCounter(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    // Easing function for smooth animation
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const currentDepth = Math.floor(fromDepth + (toDepth - fromDepth) * easeOut);
+
+                    depthReadout.textContent = `${currentDepth.toString().padStart(3, '0')}m`;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    }
+                }
+
+                requestAnimationFrame(updateCounter);
+            }
+
+            // Advanced auto-descent with dynamic timing
+            function startMissionSequence() {
+                const intervals = [8000, 8000, 8000, 8000, 8000]; // Consistent timing for better sync
+
+                function scheduleNextDescent(index) {
+                    if (index < intervals.length) {
+                        setTimeout(() => {
+                            executeAdvancedDescent();
+                            scheduleNextDescent(index + 1);
+                        }, intervals[index]);
+                    } else {
+                        // Continue cycling after mission complete
+                        setTimeout(() => {
+                            currentZone = 0; // Reset to start
+                            startMissionSequence();
+                        }, 10000);
+                    }
+                }
+
+                // Initial delay to let everything load
+                setTimeout(() => {
+                    scheduleNextDescent(0);
+                }, 2000);
+            }
+
+            // Initialize mission
+            document.addEventListener('DOMContentLoaded', () => {
+                // Debug initialization
+                console.log('[DEBUG] Page loaded, checking depth indicator setup...');
+                const depthIndicator = document.getElementById('depthIndicator');
+                const depthScale = document.querySelector('.depth-scale');
+
+                if (depthIndicator && depthScale) {
+                    console.log('[DEBUG] Initial depth indicator styles:');
+                    const styles = window.getComputedStyle(depthIndicator);
+                    console.log('  - position:', styles.position);
+                    console.log('  - top:', styles.top);
+                    console.log('  - transition:', styles.transition);
+                    console.log('  - display:', styles.display);
+                    console.log('  - visibility:', styles.visibility);
+                    console.log('  - opacity:', styles.opacity);
+                    console.log('  - z-index:', styles.zIndex);
+
+                    console.log('[DEBUG] Depth scale container:');
+                    console.log('  - height:', depthScale.offsetHeight);
+                    console.log('  - position:', window.getComputedStyle(depthScale).position);
+
+                    // Check if element is visible
+                    const rect = depthIndicator.getBoundingClientRect();
+                    console.log('[DEBUG] Depth indicator bounding rect:', rect);
+                } else {
+                    console.error('[ERROR] Depth indicator or scale not found on page load!');
+                }
+
+                startMissionSequence();
+
+                // Manual control
+                document.addEventListener('click', executeAdvancedDescent);
+
+                // Keyboard controls
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space' || e.code === 'Enter') {
+                        e.preventDefault();
+                        executeAdvancedDescent();
+                    }
+                });
+            });
+
+            // Add discovery flash animation
+            const style = document.createElement('style');
+            style.textContent = `
+            @keyframes discoveryFlash {
+                0% { filter: brightness(1) contrast(1.1); }
+                50% { filter: brightness(1.3) contrast(1.4) saturate(1.5); }
+                100% { filter: brightness(1) contrast(1.1); }
+            }
+        `;
+            document.head.appendChild(style);
+        </script>
+    </body>
+
+</html>

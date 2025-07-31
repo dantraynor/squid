@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specimen Analysis - Classified Research</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400&family=Inter:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0D1421 0%, #1A237E 40%, #0A0E27 100%);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            color: #E3F2FD;
+        }
+        
+        /* Scanning grid overlay */
+        .scan-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: scanGrid 8s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes scanGrid {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(50px); }
+        }
+        
+        /* Scanning line */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+            animation: scanLine 3s ease-in-out infinite;
+        }
+        
+        @keyframes scanLine {
+            0%, 100% { top: 0%; opacity: 0; }
+            50% { top: 100%; opacity: 1; }
+        }
+        
+        /* Classification header */
+        .classification {
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 68, 68, 0.2);
+            color: #FF4444;
+            padding: 0.5rem 2rem;
+            border: 2px solid #FF4444;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            animation: flicker 2s ease-in-out infinite alternate;
+            z-index: 20;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr auto;
+            gap: 2rem;
+            padding: 4rem 2rem 2rem;
+        }
+        
+        /* Header section */
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00E5FF;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px #00E5FF;
+            letter-spacing: 3px;
+        }
+        
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            color: #81C784;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+        
+        /* Data panels */
+        .data-panel {
+            background: rgba(26, 35, 126, 0.2);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.1), transparent);
+            animation: dataGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes dataGlow {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+        
+        .panel-title {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00E5FF;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        /* Specimen data */
+        .spec-data {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.8rem 1.5rem;
+            align-items: center;
+        }
+        
+        .spec-label {
+            font-family: 'JetBrains Mono', monospace;
+            color: #81C784;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .spec-value {
+            color: #E3F2FD;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .spec-value.highlight {
+            color: #FF4500;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Analysis charts */
+        .charts-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .chart-item {
+            background: rgba(13, 20, 33, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 4px;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .chart-label {
+            font-family: 'JetBrains Mono', monospace;
+            color: #81C784;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(26, 35, 126, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00E5FF, #40C4FF);
+            border-radius: 4px;
+            animation: fillProgress 3s ease-out;
+        }
+        
+        @keyframes fillProgress {
+            from { width: 0%; }
+        }
+        
+        .progress-bar.critical .progress-fill {
+            background: linear-gradient(90deg, #FF4500, #FF6B35);
+        }
+        
+        .progress-bar.warning .progress-fill {
+            background: linear-gradient(90deg, #FFB000, #FFA726);
+        }
+        
+        .chart-value {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #E3F2FD;
+            font-size: 0.9rem;
+        }
+        
+        /* Status indicators */
+        .status-grid {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        
+        .status-item {
+            background: rgba(26, 35, 126, 0.2);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 4px;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+            animation: statusPulse 1.5s ease-in-out infinite;
+        }
+        
+        .status-indicator.active { background: #00FF00; }
+        .status-indicator.warning { background: #FFB000; }
+        .status-indicator.critical { background: #FF4444; }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+        
+        .status-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #81C784;
+            text-transform: uppercase;
+        }
+        
+        .status-value {
+            color: #E3F2FD;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+        
+        /* Timestamp */
+        .timestamp {
+            position: absolute;
+            bottom: 1rem;
+            right: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #81C784;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 3rem 1rem 1rem;
+                gap: 1rem;
+            }
+            
+            .title { font-size: 2rem; }
+            .status-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scanning effects -->
+    <div class="scan-grid"></div>
+    <div class="scan-line"></div>
+    
+    <!-- Classification header -->
+    <div class="classification">SPECIMEN ANALYSIS - TOP SECRET</div>
+    
+    <!-- Main content -->
+    <div class="container">
+        <div class="header">
+            <h1 class="title">BIOLOGICAL ANALYSIS</h1>
+            <p class="subtitle">Mesonychoteuthis hamiltoni - Specimen Classification</p>
+        </div>
+        
+        <div class="data-panel">
+            <h3 class="panel-title">Specimen Data</h3>
+            <div class="spec-data">
+                <span class="spec-label">Species:</span>
+                <span class="spec-value">Mesonychoteuthis hamiltoni</span>
+                
+                <span class="spec-label">Length:</span>
+                <span class="spec-value highlight">46.2 meters</span>
+                
+                <span class="spec-label">Weight:</span>
+                <span class="spec-value highlight">~750 tons</span>
+                
+                <span class="spec-label">Age Est:</span>
+                <span class="spec-value">200+ years</span>
+                
+                <span class="spec-label">Depth:</span>
+                <span class="spec-value">1,968 feet</span>
+                
+                <span class="spec-label">Temperature:</span>
+                <span class="spec-value">2.1°C</span>
+                
+                <span class="spec-label">Pressure:</span>
+                <span class="spec-value">60.2 ATM</span>
+                
+                <span class="spec-label">Status:</span>
+                <span class="spec-value highlight">ACTIVE</span>
+            </div>
+        </div>
+        
+        <div class="data-panel charts-panel">
+            <h3 class="panel-title">Behavioral Analysis</h3>
+            
+            <div class="chart-item">
+                <div class="chart-label">Aggression Level</div>
+                <div class="chart-value">89%</div>
+                <div class="progress-bar critical">
+                    <div class="progress-fill" style="width: 89%;"></div>
+                </div>
+            </div>
+            
+            <div class="chart-item">
+                <div class="chart-label">Intelligence Index</div>
+                <div class="chart-value">76%</div>
+                <div class="progress-bar warning">
+                    <div class="progress-fill" style="width: 76%;"></div>
+                </div>
+            </div>
+            
+            <div class="chart-item">
+                <div class="chart-label">Bioluminescence</div>
+                <div class="chart-value">94%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 94%;"></div>
+                </div>
+            </div>
+            
+            <div class="chart-item">
+                <div class="chart-label">Territorial Response</div>
+                <div class="chart-value">100%</div>
+                <div class="progress-bar critical">
+                    <div class="progress-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="status-grid">
+            <div class="status-item">
+                <div class="status-indicator active"></div>
+                <div class="status-label">Sonar</div>
+                <div class="status-value">ONLINE</div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-indicator warning"></div>
+                <div class="status-label">Hull Integrity</div>
+                <div class="status-value">87%</div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-indicator critical"></div>
+                <div class="status-label">Specimen Proximity</div>
+                <div class="status-value">DANGER</div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-indicator active"></div>
+                <div class="status-label">Data Recording</div>
+                <div class="status-value">ACTIVE</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Timestamp -->
+    <div class="timestamp">
+        ANALYSIS TIMESTAMP: 2025.03.09 - 14:42:33 UTC<br>
+        SOUTH SANDWICH ISLANDS EXPEDITION
+    </div>
+</body>
+</html>

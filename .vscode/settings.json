@@ -1,0 +1,89 @@
+{
+    // Deep Sea Classified Project Settings + Personal Preferences
+    // AI/Copilot settings
+    "aicursor.model": "gpt-4",
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "kilo-code.allowedCommands": [
+        "npm test",
+        "npm install",
+        "tsc",
+        "git log",
+        "git diff",
+        "git show"
+    ],
+    // GitHub Codespaces settings
+    "github.codespaces.defaultExtensions": [
+        "GitHub.codespaces",
+        "GitHub.vscode-pull-request-github"
+    ],
+    "github.codespaces.createCodespaceInNewWindow": true,
+    // Theme and editor appearance
+    "workbench.colorTheme": "Tokyo Night",
+    "editor.fontSize": 14,
+    "editor.fontFamily": "'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "editor.lineHeight": 1.5,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": true,
+    "editor.wordWrap": "on",
+    "editor.minimap.enabled": true,
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    // File associations for this project
+    "files.associations": {
+        "*.html": "html",
+        "*.css": "css",
+        "*.js": "javascript",
+        "*.md": "markdown"
+    },
+    // HTML/CSS specific settings
+    "html.format.wrapLineLength": 120,
+    "html.format.indentInnerHtml": true,
+    "css.validate": true,
+    "css.lint.unknownAtRules": "ignore",
+    // Live Server settings (if extension is installed)
+    "liveServer.settings.donotShowInfoMsg": true,
+    "liveServer.settings.port": 5500,
+    "liveServer.settings.CustomBrowser": "chrome",
+    // Git settings
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    // Explorer settings
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    // Terminal settings
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontFamily": "'JetBrains Mono', monospace",
+    "terminal.integrated.sendKeybindingsToShell": true,
+    // Extensions and compatibility
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "redhat.telemetry.enabled": false,
+    // Emmet settings for HTML
+    "emmet.includeLanguages": {
+        "html": "html"
+    },
+    // Auto-save
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    // Breadcrumbs
+    "breadcrumbs.enabled": true,
+    // IntelliSense
+    "editor.suggestSelection": "first",
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.acceptSuggestionOnEnter": "on",
+    // Project-specific color customizations
+    "workbench.colorCustomizations": {
+        "editorRuler.foreground": "#1A237E40",
+        "editor.lineHighlightBackground": "#0A0E2720"
+    }
+}

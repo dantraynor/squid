@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Ascent - Critical Escape</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400&family=Inter:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(180deg, 
+                #000000 0%,     /* Deep abyss */
+                #0D1421 20%,    /* Dark waters */
+                #1A237E 60%,    /* Rising through midnight zone */
+                #2E4C8B 80%,    /* Twilight zone */
+                #4682B4 95%,    /* Approaching sunlight */
+                #87CEEB 100%    /* Surface escape */
+            );
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            color: #E3F2FD;
+            animation: rapidAscent 15s ease-out infinite;
+        }
+        
+        @keyframes rapidAscent {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 0% -200%; }
+        }
+        
+        /* Emergency warning overlay */
+        .emergency-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 30%, rgba(255, 0, 0, 0.1) 70%);
+            animation: emergencyPulse 0.5s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        
+        @keyframes emergencyPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+        
+        /* Rising bubbles */
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .bubble {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+            border-radius: 50%;
+            animation: bubbleRise 3s linear infinite;
+        }
+        
+        .bubble:nth-child(1) { width: 8px; height: 8px; left: 10%; animation-delay: 0s; }
+        .bubble:nth-child(2) { width: 12px; height: 12px; left: 20%; animation-delay: 0.5s; }
+        .bubble:nth-child(3) { width: 6px; height: 6px; left: 30%; animation-delay: 1s; }
+        .bubble:nth-child(4) { width: 10px; height: 10px; left: 40%; animation-delay: 1.5s; }
+        .bubble:nth-child(5) { width: 14px; height: 14px; left: 50%; animation-delay: 2s; }
+        .bubble:nth-child(6) { width: 9px; height: 9px; left: 60%; animation-delay: 0.3s; }
+        .bubble:nth-child(7) { width: 7px; height: 7px; left: 70%; animation-delay: 0.8s; }
+        .bubble:nth-child(8) { width: 11px; height: 11px; left: 80%; animation-delay: 1.3s; }
+        .bubble:nth-child(9) { width: 5px; height: 5px; left: 90%; animation-delay: 1.8s; }
+        
+        @keyframes bubbleRise {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.2);
+                opacity: 0;
+            }
+        }
+        
+        /* Critical alert header */
+        .alert-header {
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 0, 0, 0.4);
+            color: #FFFFFF;
+            padding: 0.8rem 3rem;
+            border: 3px solid #FF0000;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            animation: criticalFlash 0.3s ease-in-out infinite alternate;
+            z-index: 20;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+        
+        @keyframes criticalFlash {
+            0% { 
+                opacity: 1; 
+                background: rgba(255, 0, 0, 0.4);
+                box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            }
+            100% { 
+                opacity: 0.7; 
+                background: rgba(255, 68, 68, 0.6);
+                box-shadow: 0 0 50px rgba(255, 0, 0, 0.8);
+            }
+        }
+        
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        /* Emergency title */
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: #FF4444;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 40px #FF4444;
+            letter-spacing: 6px;
+            animation: emergencyGlow 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes emergencyGlow {
+            from { 
+                text-shadow: 0 0 40px #FF4444, 0 0 60px #FF4444;
+                transform: scale(1);
+            }
+            to { 
+                text-shadow: 0 0 20px #FF4444, 0 0 40px #FF4444, 0 0 80px #FF4444;
+                transform: scale(1.02);
+            }
+        }
+        
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            color: #FFB000;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            margin-bottom: 3rem;
+            animation: statusBlink 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusBlink {
+            0%, 80% { opacity: 1; }
+            90% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        
+        /* Status grid */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
+        }
+        
+        .status-panel {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid;
+            border-radius: 8px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+            animation: panelShake 0.1s ease-in-out infinite;
+        }
+        
+        @keyframes panelShake {
+            0%, 100% { transform: translateX(0px); }
+            25% { transform: translateX(-1px); }
+            75% { transform: translateX(1px); }
+        }
+        
+        .status-panel.critical {
+            border-color: #FF0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        .status-panel.warning {
+            border-color: #FFB000;
+            box-shadow: 0 0 20px rgba(255, 176, 0, 0.3);
+        }
+        
+        .status-panel.emergency {
+            border-color: #FF4500;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.3);
+        }
+        
+        .panel-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+        
+        .critical .panel-title { color: #FF4444; }
+        .warning .panel-title { color: #FFB000; }
+        .emergency .panel-title { color: #FF4500; }
+        
+        .panel-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .critical .panel-value { 
+            color: #FFFFFF; 
+            animation: criticalPulse 0.5s ease-in-out infinite alternate;
+        }
+        .warning .panel-value { color: #FFFFFF; }
+        .emergency .panel-value { 
+            color: #FFFFFF;
+            animation: emergencyFlash 1s ease-in-out infinite;
+        }
+        
+        @keyframes criticalPulse {
+            0% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        @keyframes emergencyFlash {
+            0%, 50% { opacity: 1; }
+            25%, 75% { opacity: 0.4; }
+        }
+        
+        /* Depth gauge */
+        .depth-gauge {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00E5FF;
+            border-radius: 8px;
+            padding: 2rem 1rem;
+            backdrop-filter: blur(10px);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .gauge-title {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00E5FF;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .depth-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: #FFFFFF;
+            margin-bottom: 1rem;
+            animation: depthCounter 15s ease-out infinite;
+        }
+        
+        @keyframes depthCounter {
+            0% { color: #FF4444; }
+            100% { color: #00FF00; }
+        }
+        
+        .gauge-bar {
+            width: 20px;
+            height: 200px;
+            background: rgba(26, 35, 126, 0.3);
+            border: 1px solid #00E5FF;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gauge-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(0deg, #FF0000, #FFB000, #00FF00);
+            border-radius: 10px;
+            animation: gaugeRise 15s ease-out infinite;
+        }
+        
+        @keyframes gaugeRise {
+            0% { height: 5%; }
+            100% { height: 95%; }
+        }
+        
+        /* Emergency instructions */
+        .instructions {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #FFB000;
+            border-radius: 4px;
+            padding: 1rem;
+            max-width: 300px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #FFB000;
+        }
+        
+        .instructions h4 {
+            color: #FF4444;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .title { font-size: 2.5rem; }
+            .status-grid { 
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .depth-gauge {
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+                margin: 2rem auto;
+            }
+            .instructions {
+                position: relative;
+                right: auto;
+                bottom: auto;
+                margin: 2rem auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Emergency overlay -->
+    <div class="emergency-overlay"></div>
+    
+    <!-- Rising bubbles -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+    
+    <!-- Critical alert header -->
+    <div class="alert-header">⚠ EMERGENCY ASCENT IN PROGRESS ⚠</div>
+    
+    <!-- Depth gauge -->
+    <div class="depth-gauge">
+        <div class="gauge-title">Depth (ft)</div>
+        <div class="depth-display" id="depthDisplay">1,968</div>
+        <div class="gauge-bar">
+            <div class="gauge-fill"></div>
+        </div>
+    </div>
+    
+    <!-- Main content -->
+    <div class="container">
+        <h1 class="title">EMERGENCY ASCENT</h1>
+        <p class="subtitle">CRITICAL SYSTEMS FAILURE - IMMEDIATE SURFACE</p>
+        
+        <div class="status-grid">
+            <div class="status-panel critical">
+                <div class="panel-title">Hull Integrity</div>
+                <div class="panel-value">47%</div>
+            </div>
+            
+            <div class="status-panel emergency">
+                <div class="panel-title">Oxygen Supply</div>
+                <div class="panel-value">08:42</div>
+            </div>
+            
+            <div class="status-panel warning">
+                <div class="panel-title">Ascent Rate</div>
+                <div class="panel-value">MAXIMUM</div>
+            </div>
+            
+            <div class="status-panel critical">
+                <div class="panel-title">Specimen Pursuit</div>
+                <div class="panel-value">ACTIVE</div>
+            </div>
+            
+            <div class="status-panel emergency">
+                <div class="panel-title">Ballast</div>
+                <div class="panel-value">EMERGENCY</div>
+            </div>
+            
+            <div class="status-panel warning">
+                <div class="panel-title">Surface ETA</div>
+                <div class="panel-value">04:15</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Emergency instructions -->
+    <div class="instructions">
+        <h4>Emergency Protocol</h4>
+        <p>1. All ballast tanks purged<br>
+        2. Emergency ascent initiated<br>
+        3. Hull breach detected<br>
+        4. Specimen remains aggressive<br>
+        5. Prepare for surface breach</p>
+    </div>
+    
+    <script>
+        // Animate depth counter
+        function animateDepth() {
+            const depthDisplay = document.getElementById('depthDisplay');
+            let currentDepth = 1968;
+            const targetDepth = 0;
+            const duration = 15000; // 15 seconds
+            const startTime = Date.now();
+            
+            function updateDepth() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Ease-out animation
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                const newDepth = Math.round(currentDepth - (currentDepth * easeProgress));
+                
+                depthDisplay.textContent = newDepth.toLocaleString();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateDepth);
+                } else {
+                    depthDisplay.textContent = 'SURFACE';
+                    depthDisplay.style.color = '#00FF00';
+                }
+            }
+            
+            updateDepth();
+        }
+        
+        // Start animations when page loads
+        window.addEventListener('load', () => {
+            animateDepth();
+        });
+    </script>
+</body>
+</html>

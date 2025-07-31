@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Access Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+        }
+        .error {
+            color: #ff0000;
+        }
+        .success {
+            color: #00ff00;
+        }
+        video {
+            max-width: 400px;
+            border: 2px solid #00ff00;
+        }
+        pre {
+            background: #000;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video File Access Diagnostic</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Direct Video Element</h2>
+        <video id="testVideo" controls width="400">
+            <source src="giantsquid.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <pre id="videoTest1"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: File Path Variations</h2>
+        <div id="pathTests"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: JavaScript Video Creation</h2>
+        <div id="jsVideoContainer"></div>
+        <pre id="jsVideoTest"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Fetch API Test</h2>
+        <pre id="fetchTest"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Environment Info</h2>
+        <pre id="envInfo"></pre>
+    </div>
+
+    <script>
+        // Test 1: Check direct video element
+        const video = document.getElementById('testVideo');
+        const videoTest1 = document.getElementById('videoTest1');
+        
+        video.addEventListener('loadedmetadata', () => {
+            videoTest1.innerHTML = '<span class="success">✓ Video loaded successfully!</span>\n';
+            videoTest1.innerHTML += `Duration: ${video.duration} seconds\n`;
+            videoTest1.innerHTML += `Dimensions: ${video.videoWidth}x${video.videoHeight}`;
+        });
+        
+        video.addEventListener('error', (e) => {
+            videoTest1.innerHTML = '<span class="error">✗ Video failed to load</span>\n';
+            if (video.error) {
+                videoTest1.innerHTML += `Error code: ${video.error.code}\n`;
+                videoTest1.innerHTML += `Error message: ${video.error.message}`;
+            }
+        });
+
+        // Test 2: Try different path variations
+        const pathTests = document.getElementById('pathTests');
+        const pathVariations = [
+            'giantsquid.mp4',
+            './giantsquid.mp4',
+            '../giantsquid.mp4',
+            '/giantsquid.mp4',
+            'file:///giantsquid.mp4'
+        ];
+
+        pathVariations.forEach(path => {
+            const testDiv = document.createElement('div');
+            testDiv.innerHTML = `<strong>Testing: ${path}</strong> - <span id="path-${path.replace(/[^a-z0-9]/gi, '')}">Checking...</span>`;
+            pathTests.appendChild(testDiv);
+            
+            const testVideo = document.createElement('video');
+            testVideo.src = path;
+            
+            testVideo.addEventListener('loadeddata', () => {
+                document.getElementById(`path-${path.replace(/[^a-z0-9]/gi, '')}`).innerHTML = '<span class="success">✓ Accessible</span>';
+            });
+            
+            testVideo.addEventListener('error', () => {
+                document.getElementById(`path-${path.replace(/[^a-z0-9]/gi, '')}`).innerHTML = '<span class="error">✗ Not accessible</span>';
+            });
+            
+            testVideo.load();
+        });
+
+        // Test 3: Create video via JavaScript
+        const jsVideoContainer = document.getElementById('jsVideoContainer');
+        const jsVideoTest = document.getElementById('jsVideoTest');
+        
+        const jsVideo = document.createElement('video');
+        jsVideo.controls = true;
+        jsVideo.width = 400;
+        jsVideo.src = 'giantsquid.mp4';
+        jsVideoContainer.appendChild(jsVideo);
+        
+        jsVideo.addEventListener('loadedmetadata', () => {
+            jsVideoTest.innerHTML = '<span class="success">✓ JS-created video loaded!</span>';
+        });
+        
+        jsVideo.addEventListener('error', () => {
+            jsVideoTest.innerHTML = '<span class="error">✗ JS-created video failed</span>';
+        });
+
+        // Test 4: Fetch API test
+        const fetchTest = document.getElementById('fetchTest');
+        fetchTest.innerHTML = 'Testing fetch access to giantsquid.mp4...\n';
+        
+        fetch('giantsquid.mp4')
+            .then(response => {
+                fetchTest.innerHTML += `<span class="success">✓ Fetch successful!</span>\n`;
+                fetchTest.innerHTML += `Status: ${response.status}\n`;
+                fetchTest.innerHTML += `Content-Type: ${response.headers.get('Content-Type')}\n`;
+                fetchTest.innerHTML += `Content-Length: ${response.headers.get('Content-Length')} bytes`;
+            })
+            .catch(error => {
+                fetchTest.innerHTML += `<span class="error">✗ Fetch failed: ${error.message}</span>`;
+            });
+
+        // Environment info
+        const envInfo = document.getElementById('envInfo');
+        envInfo.innerHTML = `Protocol: ${window.location.protocol}\n`;
+        envInfo.innerHTML += `Host: ${window.location.host}\n`;
+        envInfo.innerHTML += `Pathname: ${window.location.pathname}\n`;
+        envInfo.innerHTML += `User Agent: ${navigator.userAgent}\n`;
+        envInfo.innerHTML += `\nVideo codec support:\n`;
+        
+        const codecs = [
+            'video/mp4; codecs="avc1.42E01E"',
+            'video/mp4; codecs="avc1.4D401E"',
+            'video/mp4; codecs="mp4v.20.8"',
+            'video/webm; codecs="vp8"',
+            'video/webm; codecs="vp9"',
+            'video/ogg; codecs="theora"'
+        ];
+        
+        codecs.forEach(codec => {
+            const canPlay = video.canPlayType(codec);
+            envInfo.innerHTML += `${codec}: ${canPlay || 'not supported'}\n`;
+        });
+    </script>
+</body>
+</html>

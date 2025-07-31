@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Classified Footage - Giant Squid Encounter</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400&family=Inter:wght@300;400;600&display=swap');
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background: linear-gradient(135deg, #000000 0%, #0D1421 30%, #1A237E 60%, #0A0E27 100%);
+                height: 100vh;
+                overflow: hidden;
+                font-family: 'Inter', sans-serif;
+                position: relative;
+                color: #E3F2FD;
+            }
+
+            /* Animated bioluminescent particles */
+            .bioluminescence {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                pointer-events: none;
+                z-index: 1;
+            }
+
+            .bio-particle {
+                position: absolute;
+                background: radial-gradient(circle, #00FF88 0%, transparent 70%);
+                border-radius: 50%;
+                opacity: 0.2;
+                animation: bioFloat 15s ease-in-out infinite;
+            }
+
+            .bio-particle:nth-child(1) {
+                width: 6px;
+                height: 6px;
+                left: 5%;
+                animation-delay: 0s;
+            }
+
+            .bio-particle:nth-child(2) {
+                width: 8px;
+                height: 8px;
+                left: 15%;
+                animation-delay: 3s;
+            }
+
+            .bio-particle:nth-child(3) {
+                width: 4px;
+                height: 4px;
+                left: 25%;
+                animation-delay: 6s;
+            }
+
+            .bio-particle:nth-child(4) {
+                width: 10px;
+                height: 10px;
+                left: 35%;
+                animation-delay: 1s;
+            }
+
+            .bio-particle:nth-child(5) {
+                width: 7px;
+                height: 7px;
+                left: 65%;
+                animation-delay: 4s;
+            }
+
+            .bio-particle:nth-child(6) {
+                width: 5px;
+                height: 5px;
+                left: 75%;
+                animation-delay: 7s;
+            }
+
+            .bio-particle:nth-child(7) {
+                width: 9px;
+                height: 9px;
+                left: 85%;
+                animation-delay: 2s;
+            }
+
+            .bio-particle:nth-child(8) {
+                width: 6px;
+                height: 6px;
+                left: 95%;
+                animation-delay: 5s;
+            }
+
+            @keyframes bioFloat {
+
+                0%,
+                100% {
+                    transform: translateY(100vh) translateX(0px) scale(0.3);
+                    opacity: 0;
+                }
+
+                10% {
+                    opacity: 0.2;
+                }
+
+                50% {
+                    opacity: 0.6;
+                    transform: translateY(50vh) translateX(30px) scale(1);
+                }
+
+                90% {
+                    opacity: 0.1;
+                }
+            }
+
+            /* Sonar sweep effect */
+            .sonar-sweep {
+                position: absolute;
+                top: 15%;
+                right: 15%;
+                width: 200px;
+                height: 200px;
+                border: 2px solid #00E5FF;
+                border-radius: 50%;
+                opacity: 0.3;
+                animation: sonarSweep 8s linear infinite;
+            }
+
+            .sonar-sweep::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 2px;
+                height: 100px;
+                background: linear-gradient(to bottom, #00E5FF 0%, transparent 100%);
+                transform-origin: bottom center;
+                transform: translate(-50%, -100%) rotate(0deg);
+                animation: sonarRotate 8s linear infinite;
+            }
+
+            @keyframes sonarSweep {
+
+                0%,
+                100% {
+                    transform: scale(0.8);
+                    opacity: 0.2;
+                }
+
+                50% {
+                    transform: scale(1.1);
+                    opacity: 0.5;
+                }
+            }
+
+            @keyframes sonarRotate {
+                0% {
+                    transform: translate(-50%, -100%) rotate(0deg);
+                }
+
+                100% {
+                    transform: translate(-50%, -100%) rotate(360deg);
+                }
+            }
+
+            /* Main container */
+            .container {
+                position: relative;
+                z-index: 10;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 2rem;
+            }
+
+            /* Classification header */
+            .classification {
+                position: absolute;
+                top: 1.5rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(255, 69, 0, 0.2);
+                color: #FF4500;
+                padding: 0.5rem 2rem;
+                border: 2px solid #FF4500;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.9rem;
+                letter-spacing: 2px;
+                animation: urgentFlicker 2s ease-in-out infinite alternate;
+            }
+
+            @keyframes urgentFlicker {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.7;
+                }
+            }
+
+            /* Video container */
+            .video-container {
+                position: relative;
+                width: 80%;
+                max-width: 900px;
+                background: rgba(0, 20, 40, 0.8);
+                border: 2px solid #00E5FF;
+                border-radius: 12px;
+                padding: 20px;
+                backdrop-filter: blur(15px);
+                box-shadow: 0 0 40px rgba(0, 229, 255, 0.3);
+            }
+
+            .video-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+            }
+
+            .video-title {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 1.4rem;
+                color: #00E5FF;
+                font-weight: 700;
+            }
+
+            .timestamp {
+                font-family: 'JetBrains Mono', monospace;
+                color: #81C784;
+                font-size: 0.9rem;
+            }
+
+            /* Video player */
+            .video-wrapper {
+                position: relative;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .main-video {
+                width: 100%;
+                max-height: 60vh;
+                border-radius: 8px;
+                background: #000;
+            }
+
+            /* Data overlays */
+            .video-overlays {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                border-radius: 8px;
+            }
+
+            .depth-gauge {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background: rgba(0, 20, 40, 0.9);
+                border: 1px solid #00E5FF;
+                border-radius: 6px;
+                padding: 10px;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.8rem;
+            }
+
+            .depth-value {
+                color: #00E5FF;
+                font-weight: bold;
+                font-size: 1.1rem;
+            }
+
+            .coordinates-overlay {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: rgba(0, 20, 40, 0.9);
+                border: 1px solid #00E5FF;
+                border-radius: 6px;
+                padding: 10px;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.8rem;
+                color: #00E5FF;
+                text-align: right;
+            }
+
+            .mission-timer {
+                position: absolute;
+                bottom: 20px;
+                left: 20px;
+                background: rgba(0, 20, 40, 0.9);
+                border: 1px solid #FF4500;
+                border-radius: 6px;
+                padding: 8px 12px;
+                font-family: 'JetBrains Mono', monospace;
+                color: #FF4500;
+                font-size: 0.9rem;
+                animation: missionPulse 2s ease-in-out infinite;
+            }
+
+            @keyframes missionPulse {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.7;
+                }
+            }
+
+            .threat-indicator {
+                position: absolute;
+                bottom: 20px;
+                right: 20px;
+                background: rgba(255, 69, 0, 0.2);
+                border: 2px solid #FF4500;
+                border-radius: 6px;
+                padding: 8px 12px;
+                font-family: 'JetBrains Mono', monospace;
+                color: #FF4500;
+                font-size: 0.8rem;
+                font-weight: bold;
+                animation: threatAlert 1.5s ease-in-out infinite;
+            }
+
+            @keyframes threatAlert {
+
+                0%,
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+
+                50% {
+                    opacity: 0.6;
+                    transform: scale(1.05);
+                }
+            }
+
+            /* Mission data grid */
+            .mission-data {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .data-card {
+                background: rgba(0, 20, 40, 0.6);
+                border: 1px solid rgba(0, 229, 255, 0.5);
+                border-radius: 8px;
+                padding: 12px;
+                text-align: center;
+                transition: all 0.3s ease;
+            }
+
+            .data-card:hover {
+                background: rgba(0, 40, 80, 0.8);
+                border-color: #00E5FF;
+                box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+            }
+
+            .data-label {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.7rem;
+                color: #00E5FF;
+                text-transform: uppercase;
+                margin-bottom: 5px;
+            }
+
+            .data-value {
+                color: #E3F2FD;
+                font-weight: 600;
+                font-size: 1rem;
+            }
+
+            .critical {
+                color: #FF4500;
+                animation: criticalBlink 2s ease-in-out infinite;
+            }
+
+            @keyframes criticalBlink {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.6;
+                }
+            }
+
+            /* Status indicators */
+            .status-panel {
+                position: absolute;
+                top: 1.5rem;
+                right: 2rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .status-text {
+                font-family: 'JetBrains Mono', monospace;
+                color: #FF4500;
+                font-size: 0.8rem;
+                letter-spacing: 1px;
+            }
+
+            .status-indicator {
+                width: 10px;
+                height: 10px;
+                background: #FF4500;
+                border-radius: 50%;
+                animation: recordingPulse 1s ease-in-out infinite;
+            }
+
+            @keyframes recordingPulse {
+
+                0%,
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+
+                50% {
+                    opacity: 0.4;
+                    transform: scale(1.2);
+                }
+            }
+
+            /* Warning messages */
+            .warning-panel {
+                position: absolute;
+                bottom: 2rem;
+                left: 2rem;
+                background: rgba(255, 69, 0, 0.1);
+                border: 1px solid #FF4500;
+                border-radius: 8px;
+                padding: 15px;
+                max-width: 280px;
+                font-family: 'JetBrains Mono', monospace;
+                color: #FF4500;
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+
+            .warning-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+                color: #FF4444;
+            }
+
+            /* Custom video controls */
+            .custom-controls {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                margin-top: 15px;
+                padding: 10px;
+                background: rgba(0, 20, 40, 0.6);
+                border-radius: 6px;
+                border: 1px solid rgba(0, 229, 255, 0.3);
+            }
+
+            .control-btn {
+                background: linear-gradient(45deg, #00E5FF, #0091EA);
+                border: none;
+                color: #000;
+                padding: 8px 15px;
+                border-radius: 4px;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.8rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .control-btn:hover {
+                background: linear-gradient(45deg, #40C4FF, #00E5FF);
+                transform: scale(1.05);
+            }
+
+            .progress-container {
+                flex: 1;
+                height: 6px;
+                background: rgba(0, 229, 255, 0.2);
+                border-radius: 3px;
+                overflow: hidden;
+            }
+
+            .progress-bar {
+                height: 100%;
+                background: linear-gradient(90deg, #00E5FF, #00FF88);
+                width: 0%;
+                transition: width 0.1s ease;
+            }
+
+            .time-display {
+                font-family: 'JetBrains Mono', monospace;
+                color: #00E5FF;
+                font-size: 0.8rem;
+                min-width: 80px;
+            }
+
+            /* Video fallback styling */
+            .video-fallback {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 300px;
+                background: rgba(0, 0, 0, 0.8);
+                border: 2px dashed rgba(255, 69, 0, 0.5);
+                border-radius: 8px;
+                padding: 30px;
+                text-align: center;
+            }
+
+            .video-fallback code {
+                background: rgba(0, 229, 255, 0.1);
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-family: 'JetBrains Mono', monospace;
+            }
+
+            .control-btn:disabled {
+                background: rgba(255, 69, 0, 0.3);
+                color: #FF4500;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+            .control-btn:disabled:hover {
+                background: rgba(255, 69, 0, 0.3);
+                transform: none;
+            }
+
+            /* Responsive design */
+            @media (max-width: 768px) {
+                .video-container {
+                    width: 95%;
+                    padding: 15px;
+                }
+
+                .mission-data {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .video-title {
+                    font-size: 1.1rem;
+                }
+
+                .classification {
+                    font-size: 0.7rem;
+                    padding: 0.3rem 1rem;
+                }
+
+                .custom-controls {
+                    flex-wrap: wrap;
+                    gap: 10px;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .mission-data {
+                    grid-template-columns: 1fr;
+                }
+
+                .video-header {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Bioluminescent particles -->
+        <div class="bioluminescence">
+            <div class="bio-particle"></div>
+            <div class="bio-particle"></div>
+            <div class="bio-particle"></div>
+            <div class="bio-particle"></div>
+            <div class="bio-particle"></div>
+            <div class="bio-particle"></div>
+            <div class="bio-particle"></div>
+            <div class="bio-particle"></div>
+        </div>
+
+        <!-- Sonar sweep -->
+        <div class="sonar-sweep"></div>
+
+        <!-- Status indicators -->
+        <div class="status-panel">
+            <div class="status-text">RECORDING</div>
+            <div class="status-indicator"></div>
+        </div>
+
+        <!-- Main content -->
+        <div class="container">
+            <div class="video-container">
+                <div class="video-header">
+                    <div class="video-title">FIRST CONTACT FOOTAGE</div>
+                    <div class="timestamp">09:42:17 GMT • LIVE FEED</div>
+                </div>
+
+                <div class="video-wrapper">
+                    <video class="main-video" id="mainVideo" controls preload="auto" style="display: none;">
+                        <source src="giantsquid.mp4" type="video/mp4">
+                    </video>
+                    
+                    <!-- Canvas fallback for when video is not available -->
+                    <canvas id="squidCanvas" width="800" height="450" style="width: 100%; max-height: 60vh; border-radius: 8px; background: #000; display: none;"></canvas>
+                    
+                    <div class="video-fallback" id="videoFallbackMessage" style="display: none;">
+                        <h3 style="color: #FF4500; margin-bottom: 15px;">📹 Loading Video...</h3>
+                        <p style="color: #E3F2FD; line-height: 1.6;">
+                            The 486MB video file is loading.<br>
+                            This may take a moment depending on your connection.<br><br>
+                            <span id="fallbackStatus">Attempting to load real footage...</span>
+                        </p>
+                    </div>
+
+                    <!-- Data overlays -->
+                    <div class="video-overlays">
+                        <div class="depth-gauge">
+                            <div>DEPTH</div>
+                            <div class="depth-value">1,968 ft</div>
+                        </div>
+
+                        <div class="coordinates-overlay">
+                            LAT: -57.75°S<br>
+                            LON: -26.50°W<br>
+                            BEARING: 127°
+                        </div>
+
+                        <div class="mission-timer">
+                            REC: <span id="recordingTime">00:00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom controls -->
+                <div class="custom-controls">
+                    <button class="control-btn" id="playPauseBtn">▶ PLAY</button>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="time-display" id="timeDisplay">00:00 / 00:00</div>
+                    <button class="control-btn" id="fullscreenBtn">⛶ FULLSCREEN</button>
+                </div>
+
+                <!-- Mission data -->
+                <div class="mission-data">
+                    <div class="data-card">
+                        <div class="data-label">Species</div>
+                        <div class="data-value">Mesonychoteuthis hamiltoni</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">Size Estimate</div>
+                        <div class="data-value critical">1 foot</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">Camera Status</div>
+                        <div class="data-value">OPERATIONAL</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Enhanced debugging for video issues
+            console.log('=== VIDEO DEBUGGING START ===');
+            console.log('Current page URL:', window.location.href);
+            console.log('Page protocol:', window.location.protocol);
+            
+            // Video controls functionality
+            const video = document.getElementById('mainVideo');
+            const canvas = document.getElementById('squidCanvas');
+            const ctx = canvas.getContext('2d');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const progressBar = document.getElementById('progressBar');
+            const timeDisplay = document.getElementById('timeDisplay');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const recordingTime = document.getElementById('recordingTime');
+            const fallbackMsg = document.getElementById('videoFallbackMessage');
+            const fallbackStatus = document.getElementById('fallbackStatus');
+            
+            let useCanvas = false;
+            let animationId;
+            let animationStartTime;
+            let isPlaying = false;
+            let animationDuration = 60000; // 60 seconds loop
+            let videoLoadAttempts = 0;
+            const maxLoadAttempts = 3;
+
+            // Log video element details
+            console.log('Video element found:', !!video);
+            if (video) {
+                console.log('Video sources:');
+                const sources = video.querySelectorAll('source');
+                sources.forEach((source, index) => {
+                    console.log(`  Source ${index + 1}: ${source.src} (type: ${source.type})`);
+                });
+                console.log('Video readyState:', video.readyState);
+                console.log('Video networkState:', video.networkState);
+                console.log('Video error:', video.error);
+            }
+
+            // Enhanced error logging
+            video.addEventListener('loadstart', () => {
+                console.log('Video load started');
+            });
+
+            video.addEventListener('loadeddata', () => {
+                console.log('Video data loaded successfully');
+            });
+
+            video.addEventListener('canplay', () => {
+                console.log('Video can play');
+            });
+
+            video.addEventListener('canplaythrough', () => {
+                console.log('Video can play through without buffering');
+            });
+
+            // Play/Pause functionality with error handling
+            playPauseBtn.addEventListener('click', async () => {
+                if (!useCanvas) {
+                    // Video mode
+                    console.log('Play button clicked, video paused:', video.paused);
+                    if (video.paused) {
+                        try {
+                            await video.play();
+                            playPauseBtn.textContent = '⏸ PAUSE';
+                            console.log('Video play successful');
+                        } catch (error) {
+                            console.error('Video play error:', error);
+                            console.error('Error name:', error.name);
+                            console.error('Error message:', error.message);
+                            alert(`Video playback error: ${error.message}`);
+                        }
+                    } else {
+                        video.pause();
+                        playPauseBtn.textContent = '▶ PLAY';
+                    }
+                } else {
+                    // Canvas mode - handled by switchToCanvas function
+                    if (isPlaying) {
+                        stopCanvasAnimation();
+                        playPauseBtn.textContent = '▶ PLAY SIMULATION';
+                    } else {
+                        startCanvasAnimation();
+                        playPauseBtn.textContent = '⏸ PAUSE SIMULATION';
+                    }
+                }
+            });
+
+            // Progress bar update
+            video.addEventListener('timeupdate', () => {
+                const progress = (video.currentTime / video.duration) * 100;
+                progressBar.style.width = progress + '%';
+
+                // Update time display
+                const currentMin = Math.floor(video.currentTime / 60);
+                const currentSec = Math.floor(video.currentTime % 60);
+                const durationMin = Math.floor(video.duration / 60);
+                const durationSec = Math.floor(video.duration % 60);
+
+                timeDisplay.textContent =
+                    `${currentMin.toString().padStart(2, '0')}:${currentSec.toString().padStart(2, '0')} / ${durationMin.toString().padStart(2, '0')}:${durationSec.toString().padStart(2, '0')}`;
+            });
+
+            // Fullscreen functionality
+            fullscreenBtn.addEventListener('click', () => {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                } else if (video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
+            });
+
+            // Recording timer simulation
+            let recordingSeconds = 0;
+            setInterval(() => {
+                if (!video.paused) {
+                    recordingSeconds++;
+                    const hours = Math.floor(recordingSeconds / 3600);
+                    const minutes = Math.floor((recordingSeconds % 3600) / 60);
+                    const seconds = recordingSeconds % 60;
+                    recordingTime.textContent =
+                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+
+            // Video ended event
+            video.addEventListener('ended', () => {
+                playPauseBtn.textContent = '▶ REPLAY';
+            });
+
+            // Video loaded event
+            video.addEventListener('loadedmetadata', () => {
+                const durationMin = Math.floor(video.duration / 60);
+                const durationSec = Math.floor(video.duration % 60);
+                timeDisplay.textContent = `00:00 / ${durationMin.toString().padStart(2, '0')}:${durationSec.toString().padStart(2, '0')}`;
+            });
+
+            // Enhanced error handling for video issues
+            video.addEventListener('error', (e) => {
+                console.error('=== VIDEO ERROR DETAILS ===');
+                console.error('Error event:', e);
+                
+                if (video.error) {
+                    console.error('Video error code:', video.error.code);
+                    console.error('Video error message:', video.error.message);
+                    
+                    // Detailed error messages based on error codes
+                    const errorMessages = {
+                        1: 'MEDIA_ERR_ABORTED - Video loading aborted',
+                        2: 'MEDIA_ERR_NETWORK - Network error while loading video',
+                        3: 'MEDIA_ERR_DECODE - Video decoding error (codec issue)',
+                        4: 'MEDIA_ERR_SRC_NOT_SUPPORTED - Video format not supported'
+                    };
+                    
+                    const errorMsg = errorMessages[video.error.code] || 'Unknown video error';
+                    console.error('Error type:', errorMsg);
+                    
+                    // Check specific issues
+                    if (window.location.protocol === 'file:') {
+                        console.warn('⚠️ Running from file:// protocol - this may cause CORS issues');
+                        console.warn('Solution: Use a local web server (e.g., Live Server in VS Code)');
+                    }
+                    
+                    // Try to get more info about the sources
+                    const sources = video.querySelectorAll('source');
+                    sources.forEach((source, index) => {
+                        console.log(`Checking source ${index + 1}: ${source.src}`);
+                        // Create a test request to check if file is accessible
+                        fetch(source.src)
+                            .then(response => {
+                                console.log(`Source ${index + 1} fetch status:`, response.status);
+                                if (!response.ok) {
+                                    console.error(`Source ${index + 1} not accessible:`, response.statusText);
+                                }
+                            })
+                            .catch(fetchError => {
+                                console.error(`Source ${index + 1} fetch error:`, fetchError.message);
+                            });
+                    });
+                }
+                
+                playPauseBtn.textContent = '📹 VIDEO ERROR';
+                playPauseBtn.disabled = true;
+                timeDisplay.textContent = 'Check console for details';
+            });
+
+            // Check if video can play
+            video.addEventListener('canplay', () => {
+                console.log('Video ready to play');
+                playPauseBtn.disabled = false;
+                playPauseBtn.textContent = '▶ PLAY';
+            });
+
+            // Additional debugging - check video attributes after page load
+            window.addEventListener('load', () => {
+                console.log('=== PAGE LOAD COMPLETE ===');
+                console.log('Video currentSrc:', video.currentSrc);
+                console.log('Video duration:', video.duration);
+                console.log('Video paused:', video.paused);
+                console.log('Video ended:', video.ended);
+                console.log('Video seeking:', video.seeking);
+                
+                // Test if we can access the video file directly
+                const testVideoPath = 'giantsquid.mp4';
+                console.log('Testing direct access to:', testVideoPath);
+                
+                // Create an image element to test file access (less restrictive than video)
+                const testImg = new Image();
+                testImg.onload = () => console.log('File access test: SUCCESS (file is accessible)');
+                testImg.onerror = () => console.log('File access test: FAILED (file not accessible or not an image)');
+                testImg.src = testVideoPath;
+            });
+
+            console.log('=== VIDEO DEBUGGING SETUP COMPLETE ===');
+            
+            // Canvas animation functions
+            function drawUnderwaterScene(timestamp) {
+                if (!animationStartTime) animationStartTime = timestamp;
+                const elapsed = timestamp - animationStartTime;
+                
+                const width = canvas.width;
+                const height = canvas.height;
+
+                // Deep sea gradient background
+                const gradient = ctx.createLinearGradient(0, 0, 0, height);
+                gradient.addColorStop(0, '#000428');
+                gradient.addColorStop(0.5, '#004e92');
+                gradient.addColorStop(1, '#000000');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+
+                // Add particles for depth
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+                for (let i = 0; i < 50; i++) {
+                    const x = (Math.sin(elapsed * 0.0001 + i) + 1) * width / 2;
+                    const y = ((elapsed * 0.02 + i * 20) % height);
+                    const size = Math.abs(Math.sin(i) * 3) + 2; // Use Math.abs to ensure positive radius
+                    ctx.beginPath();
+                    ctx.arc(x, y, size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Draw light rays
+                ctx.save();
+                ctx.globalAlpha = 0.1;
+                ctx.fillStyle = '#00E5FF';
+                for (let i = 0; i < 5; i++) {
+                    ctx.save();
+                    ctx.translate(width / 2, -100);
+                    ctx.rotate((Math.sin(elapsed * 0.0002) * 0.2) + (i * 0.3));
+                    ctx.beginPath();
+                    ctx.moveTo(-20, 0);
+                    ctx.lineTo(20, 0);
+                    ctx.lineTo(40, height + 200);
+                    ctx.lineTo(-40, height + 200);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.restore();
+                }
+                ctx.restore();
+
+                // Draw squid silhouette
+                ctx.save();
+                ctx.translate(width / 2, height / 2);
+                ctx.rotate(Math.sin(elapsed * 0.0003) * 0.1);
+                
+                // Squid body
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, 80, 120, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Tentacles
+                for (let i = 0; i < 8; i++) {
+                    ctx.save();
+                    ctx.rotate((i / 8) * Math.PI * 2);
+                    ctx.translate(0, 100);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    for (let j = 0; j < 10; j++) {
+                        const x = Math.sin(elapsed * 0.001 + i + j * 0.5) * (j * 2);
+                        const y = j * 15;
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.lineWidth = 15 - i;
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                // Eye
+                ctx.fillStyle = 'rgba(255, 100, 100, 0.8)';
+                ctx.beginPath();
+                ctx.arc(-30, -20, 15, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+
+                // Update progress for canvas animation
+                if (isPlaying) {
+                    const progress = ((elapsed % animationDuration) / animationDuration) * 100;
+                    progressBar.style.width = progress + '%';
+                    
+                    const currentSec = Math.floor((elapsed % animationDuration) / 1000);
+                    const totalSec = Math.floor(animationDuration / 1000);
+                    timeDisplay.textContent = `00:${currentSec.toString().padStart(2, '0')} / 00:${totalSec.toString().padStart(2, '0')}`;
+                    
+                    animationId = requestAnimationFrame(drawUnderwaterScene);
+                }
+            }
+            
+            function startCanvasAnimation() {
+                isPlaying = true;
+                animationId = requestAnimationFrame(drawUnderwaterScene);
+            }
+            
+            function stopCanvasAnimation() {
+                isPlaying = false;
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+            }
+            
+            function switchToCanvas() {
+                console.log('Switching to canvas animation fallback');
+                useCanvas = true;
+                video.style.display = 'none';
+                canvas.style.display = 'block';
+                
+                // Update controls for canvas
+                playPauseBtn.disabled = false;
+                playPauseBtn.textContent = '▶ PLAY SIMULATION';
+                timeDisplay.textContent = '00:00 / 01:00';
+                
+                // Button is already configured with event listener above
+                
+                // Draw initial frame
+                drawUnderwaterScene(0);
+            }
+            
+            // Check if video loads successfully
+            video.addEventListener('loadeddata', () => {
+                console.log('Video loaded successfully');
+                console.log('Video duration:', video.duration);
+                console.log('Video dimensions:', video.videoWidth, 'x', video.videoHeight);
+                useCanvas = false;
+                video.style.display = 'block';
+                canvas.style.display = 'none';
+                fallbackMsg.style.display = 'none';
+                playPauseBtn.disabled = false;
+                playPauseBtn.textContent = '▶ PLAY';
+            });
+            
+            // Handle video metadata loaded
+            video.addEventListener('loadedmetadata', () => {
+                console.log('Video metadata loaded');
+                console.log('Video can play through:', video.readyState >= 4);
+                if (fallbackMsg.style.display === 'block') {
+                    fallbackStatus.textContent = 'Video metadata loaded, preparing playback...';
+                }
+            });
+            
+            // Handle video progress
+            video.addEventListener('progress', () => {
+                if (video.buffered.length > 0) {
+                    const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+                    const duration = video.duration;
+                    if (duration > 0) {
+                        const bufferedPercent = (bufferedEnd / duration) * 100;
+                        console.log(`Video buffered: ${bufferedPercent.toFixed(1)}%`);
+                        if (fallbackMsg.style.display === 'block' && bufferedPercent > 0) {
+                            fallbackStatus.textContent = `Loading video: ${bufferedPercent.toFixed(0)}% buffered`;
+                        }
+                    }
+                }
+            });
+            
+            // If video fails, switch to canvas
+            video.addEventListener('error', (e) => {
+                console.error('Video error detected:', e);
+                videoLoadAttempts++;
+                
+                if (!useCanvas && videoLoadAttempts < maxLoadAttempts) {
+                    console.log(`Retrying video load (attempt ${videoLoadAttempts + 1}/${maxLoadAttempts})`);
+                    fallbackStatus.textContent = `Video load failed, retrying (${videoLoadAttempts}/${maxLoadAttempts})...`;
+                    setTimeout(() => {
+                        video.load();
+                    }, 1000);
+                } else if (!useCanvas) {
+                    console.log('Max load attempts reached, switching to canvas animation');
+                    fallbackStatus.textContent = 'Using simulated animation (video unavailable)';
+                    setTimeout(() => {
+                        switchToCanvas();
+                        fallbackMsg.style.display = 'none';
+                    }, 2000);
+                }
+            });
+            
+            // Show loading message initially
+            fallbackMsg.style.display = 'block';
+            canvas.style.display = 'block';
+            
+            // Draw initial frame while loading
+            drawUnderwaterScene(0);
+            
+            // Check video state and attempt load
+            function checkVideoAndLoad() {
+                console.log('Checking video availability...');
+                
+                // For file:// protocol, show a different message
+                if (window.location.protocol === 'file:') {
+                    fallbackStatus.innerHTML = 'Please use a web server to view the video<br>Run: <code>python3 -m http.server 8080</code>';
+                    switchToCanvas();
+                    return;
+                }
+                
+                // Try to load the video
+                video.load();
+                
+                // Set a timeout to check if video is loading
+                setTimeout(() => {
+                    if (video.readyState === 0 && video.networkState === 3 && !useCanvas) {
+                        console.log('Video not loading, checking again...');
+                        videoLoadAttempts++;
+                        if (videoLoadAttempts < maxLoadAttempts) {
+                            checkVideoAndLoad();
+                        } else {
+                            console.error('Video failed to load after multiple attempts');
+                            fallbackStatus.textContent = 'Using simulated animation (video unavailable)';
+                            setTimeout(() => {
+                                switchToCanvas();
+                                fallbackMsg.style.display = 'none';
+                            }, 2000);
+                        }
+                    }
+                }, 3000);
+            }
+            
+            // Start the loading process
+            checkVideoAndLoad();
+        </script>
+    </body>
+
+</html>

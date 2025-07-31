@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Deep Sea Discovery - Journey Map</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400&display=swap');
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background: linear-gradient(135deg, #0A0E27 0%, #1A237E 50%, #0D1421 100%);
+                height: 100vh;
+                overflow: hidden;
+                font-family: 'Orbitron', sans-serif;
+                position: relative;
+            }
+
+            /* Animated background particles */
+            .particles {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .particle {
+                position: absolute;
+                background: #00E5FF;
+                border-radius: 50%;
+                opacity: 0.1;
+                animation: float 6s ease-in-out infinite;
+            }
+
+            .particle:nth-child(1) {
+                width: 4px;
+                height: 4px;
+                left: 10%;
+                animation-delay: 0s;
+            }
+
+            .particle:nth-child(2) {
+                width: 6px;
+                height: 6px;
+                left: 20%;
+                animation-delay: 1s;
+            }
+
+            .particle:nth-child(3) {
+                width: 3px;
+                height: 3px;
+                left: 30%;
+                animation-delay: 2s;
+            }
+
+            .particle:nth-child(4) {
+                width: 5px;
+                height: 5px;
+                left: 40%;
+                animation-delay: 0.5s;
+            }
+
+            .particle:nth-child(5) {
+                width: 4px;
+                height: 4px;
+                left: 50%;
+                animation-delay: 1.5s;
+            }
+
+            .particle:nth-child(6) {
+                width: 7px;
+                height: 7px;
+                left: 60%;
+                animation-delay: 3s;
+            }
+
+            .particle:nth-child(7) {
+                width: 3px;
+                height: 3px;
+                left: 70%;
+                animation-delay: 2.5s;
+            }
+
+            .particle:nth-child(8) {
+                width: 5px;
+                height: 5px;
+                left: 80%;
+                animation-delay: 4s;
+            }
+
+            .particle:nth-child(9) {
+                width: 4px;
+                height: 4px;
+                left: 90%;
+                animation-delay: 1s;
+            }
+
+            @keyframes float {
+
+                0%,
+                100% {
+                    transform: translateY(100vh) rotate(0deg);
+                    opacity: 0;
+                }
+
+                10% {
+                    opacity: 0.1;
+                }
+
+                50% {
+                    opacity: 0.3;
+                }
+
+                90% {
+                    opacity: 0.1;
+                }
+            }
+
+            /* Main content container */
+            .container {
+                position: relative;
+                z-index: 10;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 2rem;
+            }
+
+            .title {
+                font-size: 3.5rem;
+                font-weight: 900;
+                color: #E3F2FD;
+                margin-bottom: 0.5rem;
+                text-shadow: 0 0 30px #00E5FF;
+                letter-spacing: 8px;
+                animation: glow 3s ease-in-out infinite alternate;
+            }
+
+            @keyframes glow {
+                from {
+                    text-shadow: 0 0 30px #00E5FF, 0 0 40px #00E5FF;
+                }
+
+                to {
+                    text-shadow: 0 0 20px #00E5FF, 0 0 30px #00E5FF, 0 0 40px #00E5FF;
+                }
+            }
+
+            .subtitle {
+                font-size: 1.4rem;
+                color: #81C784;
+                margin-bottom: 2rem;
+                font-family: 'JetBrains Mono', monospace;
+                letter-spacing: 3px;
+            }
+
+            #map {
+                width: 90%;
+                max-width: 1200px;
+                height: 70vh;
+                margin-bottom: 2rem;
+                border-radius: 8px;
+                border: 2px solid rgba(0, 229, 255, 0.5);
+                box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+            }
+
+            .journey-info {
+                display: flex;
+                justify-content: center;
+                gap: 3rem;
+                margin-top: 1rem;
+                margin-bottom: 4rem;
+                font-family: 'JetBrains Mono', monospace;
+            }
+
+            .journey-point {
+                background: rgba(26, 35, 126, 0.3);
+                border: 1px solid #00E5FF;
+                padding: 1rem 2rem;
+                backdrop-filter: blur(10px);
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .journey-point:hover {
+                background: rgba(26, 35, 126, 0.5);
+                box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+                transform: translateY(-3px);
+            }
+
+            .point-label {
+                font-size: 0.8rem;
+                color: #00E5FF;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 0.3rem;
+            }
+
+            .point-value {
+                font-size: 1.1rem;
+                color: #E3F2FD;
+                font-weight: 700;
+            }
+
+            .nav-back {
+                position: absolute;
+                bottom: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(45deg, #00E5FF, #0091EA);
+                color: #000;
+                padding: 12px 30px;
+                border-radius: 25px;
+                text-decoration: none;
+                font-family: 'JetBrains Mono', monospace;
+                font-weight: 700;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+                letter-spacing: 1px;
+                border: none;
+                cursor: pointer;
+                z-index: 100;
+            }
+
+            .nav-back:hover {
+                background: linear-gradient(45deg, #40C4FF, #00E5FF);
+                transform: translateX(-50%) scale(1.05);
+                box-shadow: 0 10px 20px rgba(0, 229, 255, 0.3);
+            }
+
+            /* Responsive design */
+            @media (max-width: 768px) {
+                .title {
+                    font-size: 2.5rem;
+                    letter-spacing: 4px;
+                }
+
+                .subtitle {
+                    font-size: 1rem;
+                }
+
+                #map {
+                    width: 100%;
+                    height: 60vh;
+                }
+
+                .journey-info {
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+
+                .container {
+                    padding: 1rem;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Background particles -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <!-- Main content -->
+        <div class="container">
+            <h1 class="title">EXPEDITION ROUTE</h1>
+            <h2 class="subtitle">CHILE TO SOUTH SANDWICH ISLANDS</h2>
+
+            <div id="map"></div>
+
+            <div class="journey-info">
+                <div class="journey-point">
+                    <div class="point-label">Departure</div>
+                    <div class="point-value">Punta Arenas, Chile</div>
+                </div>
+                <div class="journey-point">
+                    <div class="point-label">Distance</div>
+                    <div class="point-value">~3,500 km</div>
+                </div>
+                <div class="journey-point">
+                    <div class="point-label">Destination</div>
+                    <div class="point-value">South Sandwich Islands</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <a href="index.html" class="nav-back">← BACK TO INDEX</a>
+
+        <script>
+            // Leaflet.js map setup
+            const map = L.map('map').setView([-55, -45], 4);
+            
+            // Using ESRI World Imagery for satellite view
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                maxZoom: 19
+            }).addTo(map);
+            
+            // Add a dark overlay to maintain the theme
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+                attribution: '',
+                subdomains: 'abcd',
+                maxZoom: 20,
+                opacity: 0.7
+            }).addTo(map);
+
+            // Path for simulation
+            const startCoords = [-53.16, -70.92]; // Chile
+            const endCoords = [-57.75, -26.50];   // South Sandwich Islands
+            const polyline = L.polyline([startCoords, endCoords], { 
+                color: '#00E5FF',
+                weight: 3,
+                opacity: 0.8
+            }).addTo(map);
+
+            // Start marker
+            L.marker(startCoords).addTo(map)
+                .bindPopup('<b>Departure Point</b><br>Punta Arenas, Chile');
+
+            // End marker
+            L.marker(endCoords).addTo(map)
+                .bindPopup('<b>Research Site</b><br>South Sandwich Islands');
+
+            // Create a simple ship icon using CSS
+            const shipIcon = L.divIcon({
+                html: `
+                    <div style="
+                        position: relative;
+                        width: 35px;
+                        height: 20px;
+                        transform: rotate(45deg);
+                        filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.8));
+                    ">
+                        <!-- Ship hull -->
+                        <div style="
+                            position: absolute;
+                            width: 35px;
+                            height: 12px;
+                            background: #00E5FF;
+                            bottom: 0;
+                            left: 0;
+                            border-radius: 50% 10% 10% 50%;
+                            box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+                        "></div>
+                        <!-- Ship cabin -->
+                        <div style="
+                            position: absolute;
+                            width: 15px;
+                            height: 8px;
+                            background: #40C4FF;
+                            bottom: 12px;
+                            left: 10px;
+                            border-radius: 2px 2px 0 0;
+                        "></div>
+                    </div>
+                `,
+                className: '',
+                iconSize: [35, 20],
+                iconAnchor: [17, 10]
+            });
+            const vesselMarker = L.marker(startCoords, { icon: shipIcon }).addTo(map);
+            map.fitBounds(polyline.getBounds());
+
+            let startTime = null;
+            const animationDuration = 15000; // 15 seconds for longer route
+
+            function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = (timestamp - startTime) / animationDuration;
+
+                if (progress < 1) {
+                    const lat = startCoords[0] + (endCoords[0] - startCoords[0]) * progress;
+                    const lng = startCoords[1] + (endCoords[1] - startCoords[1]) * progress;
+                    vesselMarker.setLatLng([lat, lng]);
+                    requestAnimationFrame(animate);
+                } else {
+                    vesselMarker.setLatLng(endCoords);
+                    // Restart animation after a pause
+                    setTimeout(() => {
+                        startTime = null;
+                        vesselMarker.setLatLng(startCoords);
+                        requestAnimationFrame(animate);
+                    }, 3000);
+                }
+            }
+
+            requestAnimationFrame(animate);
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                map.invalidateSize();
+            });
+        </script>
+    </body>
+
+</html>

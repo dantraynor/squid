@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Contact - The Encounter</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400&family=Inter:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #000000 0%, #0D1421 30%, #1A237E 60%, #0A0E27 100%);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            color: #E3F2FD;
+        }
+        
+        /* Camera feed overlay effect */
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(0deg, transparent 49%, rgba(0, 255, 136, 0.08) 50%, transparent 51%),
+                linear-gradient(90deg, transparent 49%, rgba(0, 255, 136, 0.03) 50%, transparent 51%);
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            animation: scanLines 0.1s linear infinite;
+            z-index: 15;
+        }
+        
+        @keyframes scanLines {
+            0% { background-position: 0 0, 0 0; }
+            100% { background-position: 0 3px, 3px 0; }
+        }
+        
+        /* ROV camera timestamp */
+        .timestamp {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #00E5FF;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            border: 1px solid #00E5FF;
+            z-index: 20;
+        }
+        
+        /* Animated bioluminescent particles */
+        .bioluminescence {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .bio-particle {
+            position: absolute;
+            background: radial-gradient(circle, #00FF88 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: bioFloat 15s ease-in-out infinite;
+        }
+        
+        .bio-particle:nth-child(1) { width: 6px; height: 6px; left: 15%; animation-delay: 0s; }
+        .bio-particle:nth-child(2) { width: 10px; height: 10px; left: 30%; animation-delay: 4s; }
+        .bio-particle:nth-child(3) { width: 4px; height: 4px; left: 45%; animation-delay: 8s; }
+        .bio-particle:nth-child(4) { width: 8px; height: 8px; left: 65%; animation-delay: 2s; }
+        .bio-particle:nth-child(5) { width: 12px; height: 12px; left: 80%; animation-delay: 6s; }
+        .bio-particle:nth-child(6) { width: 7px; height: 7px; left: 90%; animation-delay: 10s; }
+        .bio-particle:nth-child(7) { width: 5px; height: 5px; left: 20%; animation-delay: 12s; }
+        .bio-particle:nth-child(8) { width: 9px; height: 9px; left: 75%; animation-delay: 3s; }
+        
+        @keyframes bioFloat {
+            0%, 100% { 
+                transform: translateY(120vh) translateX(0px) scale(0.3); 
+                opacity: 0; 
+            }
+            15% { opacity: 0.4; }
+            50% { 
+                opacity: 0.8; 
+                transform: translateY(40vh) translateX(30px) scale(1.1);
+            }
+            85% { opacity: 0.3; }
+        }
+        
+        /* ROV sonar ping effect */
+        .sonar-ping {
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            width: 300px;
+            height: 300px;
+            border: 2px solid #00E5FF;
+            border-radius: 50%;
+            opacity: 0;
+            animation: sonarPing 4s ease-out infinite;
+        }
+        
+        @keyframes sonarPing {
+            0% {
+                transform: scale(0.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        /* Main content container */
+        .container {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        /* Historic discovery header */
+        .classification {
+            position: absolute;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 255, 136, 0.2);
+            color: #00FF88;
+            padding: 0.5rem 2rem;
+            border: 2px solid #00FF88;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            animation: discoveryPulse 2s ease-in-out infinite alternate;
+            z-index: 20;
+        }
+        
+        @keyframes discoveryPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px #00FF88; }
+            50% { opacity: 0.8; box-shadow: 0 0 25px #00FF88; }
+        }
+        
+        /* Encounter title */
+        .encounter-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.8rem;
+            font-weight: 900;
+            color: #E3F2FD;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 40px #00FF88;
+            letter-spacing: 8px;
+            text-align: center;
+            animation: titleReveal 3s ease-out forwards;
+        }
+        
+        @keyframes titleReveal {
+            0% { 
+                opacity: 0;
+                transform: scale(0.8) translateY(30px);
+                text-shadow: 0 0 5px #00FF88;
+            }
+            100% { 
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                text-shadow: 0 0 40px #00FF88, 0 0 60px #00FF88;
+            }
+        }
+        
+        /* Glass squid creature - more realistic */
+        .creature-container {
+            position: relative;
+            width: 500px;
+            height: 250px;
+            margin: 2rem 0;
+            opacity: 0;
+            animation: creatureReveal 4s ease-out 1.5s forwards;
+        }
+        
+        .creature-silhouette {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(0, 229, 255, 0.15) 30%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(0, 229, 255, 0.15) 70%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            clip-path: ellipse(40% 30% at 50% 50%);
+            position: relative;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+            animation: glassFloat 8s ease-in-out infinite;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(1px);
+        }
+        
+        .tentacles {
+            position: absolute;
+            bottom: -15px;
+            left: 15%;
+            width: 70%;
+            height: 60px;
+            background: linear-gradient(to bottom, 
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(0, 229, 255, 0.1) 50%,
+                transparent 100%
+            );
+            clip-path: polygon(
+                0% 0%, 8% 100%, 16% 0%, 24% 100%, 
+                32% 0%, 40% 100%, 48% 0%, 56% 100%, 
+                64% 0%, 72% 100%, 80% 0%, 88% 100%, 100% 0%
+            );
+            animation: tentacleFlow 6s ease-in-out infinite;
+        }
+        
+        /* Distinctive hooks */
+        .hooks {
+            position: absolute;
+            bottom: -8px;
+            left: 25%;
+            width: 50%;
+            height: 15px;
+        }
+        
+        .hook {
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #FF6B6B;
+            border-radius: 1px;
+            box-shadow: 0 0 8px #FF6B6B;
+            animation: hookRotate 4s ease-in-out infinite;
+        }
+        
+        .hook:nth-child(1) { left: 15%; animation-delay: 0s; }
+        .hook:nth-child(2) { left: 35%; animation-delay: 0.5s; }
+        .hook:nth-child(3) { left: 55%; animation-delay: 1s; }
+        .hook:nth-child(4) { left: 75%; animation-delay: 1.5s; }
+        
+        @keyframes hookRotate {
+            0%, 100% { transform: rotate(0deg); opacity: 0.8; }
+            50% { transform: rotate(180deg); opacity: 1; }
+        }
+        
+        /* Large eyes - proportionally huge */
+        .eyes {
+            position: absolute;
+            top: 35%;
+            left: 55%;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #FFD700 30%, #FF8C00 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 20px #FFD700;
+            animation: eyeWatch 3s ease-in-out infinite;
+        }
+        
+        .eyes::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -35px;
+            width: 28px;
+            height: 28px;
+            background: radial-gradient(circle, #FFD700 30%, #FF8C00 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 25px #FFD700;
+        }
+        
+        @keyframes creatureReveal {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(80px);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0px);
+            }
+        }
+        
+        @keyframes glassFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(1deg); }
+            75% { transform: translateY(8px) rotate(-1deg); }
+        }
+        
+        @keyframes tentacleFlow {
+            0%, 100% { transform: skewX(0deg) scaleY(1); }
+            30% { transform: skewX(3deg) scaleY(1.1); }
+            70% { transform: skewX(-3deg) scaleY(0.9); }
+        }
+        
+        @keyframes eyeWatch {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 30px #FFD700; }
+        }
+        
+        /* Discovery data */
+        .encounter-data {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            opacity: 0;
+            animation: dataReveal 2s ease-out 3s forwards;
+        }
+        
+        .data-box {
+            background: rgba(0, 30, 60, 0.7);
+            border: 2px solid #00E5FF;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(0, 255, 136, 0.15) 50%, transparent 100%);
+            transition: left 0.8s ease;
+        }
+        
+        .data-box:hover::before {
+            left: 100%;
+        }
+        
+        .data-box:hover {
+            background: rgba(0, 50, 100, 0.8);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+            transform: translateY(-12px) scale(1.02);
+            border-color: #00FF88;
+        }
+        
+        .data-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #00E5FF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        
+        .data-value {
+            font-size: 1.5rem;
+            color: #E3F2FD;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .historic {
+            color: #00FF88;
+            animation: historicGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes historicGlow {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px #00FF88; }
+            50% { opacity: 0.8; text-shadow: 0 0 20px #00FF88, 0 0 30px #00FF88; }
+        }
+        
+        @keyframes dataReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* Status indicators */
+        .status-panel {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 20;
+        }
+        
+        .status-text {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00FF88;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            background: #00FF88;
+            border-radius: 50%;
+            animation: recordingPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes recordingPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.4); }
+        }
+        
+        /* Coordinates display */
+        .coordinates {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #00E5FF;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #00E5FF;
+        }
+        
+        /* Discovery milestone */
+        .milestone {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00FF88;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #00FF88;
+            font-size: 0.85rem;
+            max-width: 280px;
+            text-align: center;
+            opacity: 0;
+            animation: milestoneAppear 2s ease-out 4s forwards;
+        }
+        
+        @keyframes milestoneAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .encounter-title { font-size: 2.8rem; letter-spacing: 4px; }
+            .creature-container { width: 350px; height: 180px; }
+            .encounter-data { grid-template-columns: 1fr; gap: 1rem; }
+            .classification { font-size: 0.7rem; padding: 0.3rem 1rem; }
+            .coordinates, .milestone { position: static; margin: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Camera feed overlay -->
+    <div class="camera-overlay"></div>
+    
+    <!-- ROV timestamp -->
+    <div class="timestamp">
+        ROV SuBastian • 09 MAR 2025 • 14:38:41 UTC
+    </div>
+    
+    <!-- Bioluminescent particles -->
+    <div class="bioluminescence">
+        <div class="bio-particle"></div>
+        <div class="bio-particle"></div>
+        <div class="bio-particle"></div>
+        <div class="bio-particle"></div>
+        <div class="bio-particle"></div>
+        <div class="bio-particle"></div>
+        <div class="bio-particle"></div>
+        <div class="bio-particle"></div>
+    </div>
+    
+    <!-- Sonar ping -->
+    <div class="sonar-ping"></div>
+    
+    <!-- Status indicators -->
+    <div class="classification">HISTORIC DISCOVERY • MARCH 9, 2025</div>
+    <div class="status-panel">
+        <div class="status-text">FIRST LIVE RECORDING</div>
+        <div class="status-indicator"></div>
+    </div>
+    
+    <!-- Main content -->
+    <div class="container">
+        <h1 class="encounter-title">FIRST CONTACT</h1>
+        
+        <div class="creature-container">
+            <div class="creature-silhouette">
+                <div class="tentacles"></div>
+                <div class="hooks">
+                    <div class="hook"></div>
+                    <div class="hook"></div>
+                    <div class="hook"></div>
+                    <div class="hook"></div>
+                </div>
+                <div class="eyes"></div>
+            </div>
+        </div>
+        
+        <div class="encounter-data">
+            <div class="data-box">
+                <div class="data-label">Size Estimate</div>
+                <div class="data-value">30cm Juvenile</div>
+            </div>
+            <div class="data-box">
+                <div class="data-label">Species</div>
+                <div class="data-value">M. hamiltoni</div>
+            </div>
+            <div class="data-box">
+                <div class="data-label">Status</div>
+                <div class="data-value historic">FIRST EVER LIVE</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Coordinates and milestone -->
+    <div class="coordinates">
+        SOUTH SANDWICH ISLANDS<br>
+        LAT: -59.4263°S<br>
+        LON: -27.0434°W<br>
+        DEPTH: 600 meters<br>
+        TEMP: -0.9°C
+    </div>
+    
+    <div class="milestone">
+        🎯 BREAKTHROUGH: First confirmed<br>
+        footage of living colossal squid<br>
+        in natural habitat.<br>
+        <strong>CENTURY-LONG QUEST COMPLETE</strong>
+    </div>
+</body>
+</html>
