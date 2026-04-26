@@ -1,6 +1,8 @@
 # Deep Sea Discovery: Colossal Squid Presentation
 
-![Live footage preview](assets/readme/live-footage.gif)
+<p align="center">
+  <img src="assets/readme/live-footage.gif" alt="Live footage preview" width="720">
+</p>
 
 An HTML presentation about the groundbreaking 2025 colossal squid discovery.
 
@@ -10,5 +12,4 @@ This presentation covers the historic first live footage of a colossal squid cap
 
 ## View @ 
 
-[littlesquid.org
-](https://littlesquid.org/)
+[littlesquid.org](https://littlesquid.org/)
